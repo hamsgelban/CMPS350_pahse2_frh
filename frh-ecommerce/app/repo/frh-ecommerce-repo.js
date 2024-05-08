@@ -444,11 +444,10 @@ class EcommerceRepo {
             });
     
             try {
-            if (transaction.transType === 'Deposit') {
-                customer.balance += parseInt(transaction.amount);
-            } else if (customer.balance >= transaction.amount) {
-                customer.balance -= parseInt(transaction.amount);
-            } else {
+            if (transaction.totalPrice < customer.balance) {
+                customer.balance -= parseInt(transaction.totalPrice);
+            }
+            else {
                 return { error: "Insufficient Balance" };
             }
 
