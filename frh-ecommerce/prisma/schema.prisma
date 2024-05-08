@@ -61,7 +61,7 @@ model Transaction {
   date       DateTime @default(now())
   quantity   Int
   totalPrice Float
+  location   String
   customer   Customer @relation(fields: [userId], references: [id])
   artwork    Item     @relation(fields: [itemId], references: [id])
-  location   String
 }

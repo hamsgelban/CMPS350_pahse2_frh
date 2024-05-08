@@ -1,15 +1,16 @@
 import fs from 'fs-extra'
 import path from 'path'
 
+
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
+
 
 const categoriesPath = path.join(process.cwd(), 'app/data/categories.json')
 const artistsPath = path.join(process.cwd(), 'app/data/artists.json')
 const customersPath = path.join(process.cwd(), 'app/data/customers.json')
 const itemsPath = path.join(process.cwd(), 'app/data/items.json')
 const transactionsPath = path.join(process.cwd(), 'app/data/transactions.json')
-
 
 async function main() {
     try {
@@ -19,12 +20,13 @@ async function main() {
         const items = await fs.readJSON(itemsPath)
         const transactions = await fs.readJSON(transactionsPath)
 
-        // for (const category of categories) await prisma.category.create({ data: category })
-        // for (const artist of artists) await prisma.artist.create({ data: artist })
+
+        for (const category of categories) await prisma.category.create({ data: category })
+        for (const artist of artists) await prisma.artist.create({ data: artist })
         for (const customer of customers) await prisma.customer.create({ data: customer })
         for (const item of items) await prisma.item.create({ data: item })
         for (const transaction of transactions) await prisma.transaction.create({ data: transaction })
-
+    
     } catch (error) {
         console.log(error);
         return { error: error.message }
