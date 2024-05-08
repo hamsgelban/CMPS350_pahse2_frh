@@ -93,6 +93,11 @@ function sortItemsByPrice(order) {
     }
     showItems(sortedItems);
 }
+// This function will be called when a card is clicked.
+function navigateToItemDetail(itemId) {
+    console.log("INSIDE FUNC");
+    window.location.href = `/public/html/item_details.html?id=${itemId}`
+}
 
 function showItems(itemsList) {
     const mappedItems = itemsList.map(
@@ -114,10 +119,7 @@ function showItems(itemsList) {
     itemsDIV.innerHTML = mappedItems
 }
 
-// This function will be called when a card is clicked.
-function navigateToItemDetail(itemId) {
-    window.location.href = `/html/item_details.html?id=${itemId}`
-}
+
 
 function handleFilter(categoryId) {
     console.log(categoryId);
