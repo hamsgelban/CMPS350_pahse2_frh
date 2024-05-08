@@ -6,7 +6,7 @@
         "categoryId": 1,
         "id": 1,
         "description": "An elegant watercolor painting capturing the serene grace of a swan on water, with delicate brush strokes evoking the tranquility of nature.",
-        "image_url": "/images/items/item-1.jpg",
+        "image_url": "/public/images/items/item-1.jpg",
         "available_quantity": 7,
         "quantity_to_buy": 0,
         "artistID": 1
@@ -18,7 +18,7 @@
         "categoryId": 1,
         "id": 2,
         "description": "Vibrant oil painting of freshly picked lemons nestled among rich green leaves, evoking the zest of summer in a classic style.",
-        "image_url": "/images/items/item-2.jpg",
+        "image_url": "/public/images/items/item-2.jpg",
         "available_quantity": 3,
         "quantity_to_buy": 0,
         "artistID": 2
@@ -30,7 +30,7 @@
         "categoryId": 2,
         "id": 3,
         "description": "A striking sculpture of a woman's head, capturing a moment of peaceful contemplation in smooth marble curves, echoing classical forms.",
-        "image_url": "/images/items/item-3.jpg",
+        "image_url": "/public/images/items/item-3.jpg",
         "available_quantity": 5,
         "quantity_to_buy": 0,
         "artistID": 3
@@ -42,7 +42,7 @@
         "categoryId": 5,
         "id": 4,
         "description": "A whimsical digital artwork depicting a woman amidst the clouds, reaching out as stars and stardust envelop her in a gentle dance.",
-        "image_url": "/images/items/item-4.jpeg",
+        "image_url": "/public/images/items/item-4.jpeg",
         "available_quantity": 10,
         "quantity_to_buy": 0,
         "artistID": 7
@@ -54,7 +54,7 @@
         "categoryId": 5,
         "id": 5,
         "description": "An enchanting digital illustration of a mysterious witch brewing potions under the moonlight, accompanied by her faithful feline companion.",
-        "image_url": "/images/items/item-5.jpeg",
+        "image_url": "/public/images/items/item-5.jpeg",
         "available_quantity": 1,
         "quantity_to_buy": 0,
         "artistID": 4
@@ -66,7 +66,7 @@
         "categoryId": 1,
         "id": 6,
         "description": "A captivating expressionist portrait that conveys raw emotion through chaotic strokes and vibrant color contrasts.",
-        "image_url": "/images/items/item-6.png",
+        "image_url": "/public/images/items/item-6.png",
         "available_quantity": 8,
         "quantity_to_buy": 0,
         "artistID": 6
