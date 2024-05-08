@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client'
 import { Piedra } from 'next/font/google';
 const prisma = new PrismaClient()
 
+//Test push
 class EcommerceRepo {
 
     //Category Methods
