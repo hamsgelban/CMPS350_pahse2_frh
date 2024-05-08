@@ -19,8 +19,8 @@ async function main() {
         const items = await fs.readJSON(itemsPath)
         const transactions = await fs.readJSON(transactionsPath)
 
-        //for (const category of categories) await prisma.category.create({ data: category })
-        //for (const artist of artists) await prisma.artist.create({ data: artist })
+        // for (const category of categories) await prisma.category.create({ data: category })
+        // for (const artist of artists) await prisma.artist.create({ data: artist })
         for (const customer of customers) await prisma.customer.create({ data: customer })
         for (const item of items) await prisma.item.create({ data: item })
         for (const transaction of transactions) await prisma.transaction.create({ data: transaction })
