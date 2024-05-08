@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         items = await response.json()
 
         currentItem = items.find(i => i.id== itemId);
+        console.log(currentItem);
         if (currentItem) {
             displayItemInfo();
         } else {
@@ -56,7 +57,7 @@ async function findItemAndUpdateQuantity(change) {
 
         if(newQuantity>=0 && currentItem.available_quantity>=newQuantity){
             currentItem.quantity_to_buy=newQuantity
-            await fetch(`${apiURl}/items/${currentItem.id}`,
+            await fetch(`${apiURL}/items/${currentItem.id}`,
                 {
                     method: 'PUT',
                     headers: { 'Content-Type': "application/json", },
@@ -83,64 +84,76 @@ function increaseQuantity() {
 }
 
 
-async function onPurchase(e){
+async function onPurchase(e) {
+    e.preventDefault();
+    const form = document.querySelector('#purchase-form');
+    const formData = formToObject(form);
 
-    e.preventDefault()
+    const location = `${formData.streetnum}, Area ${formData.areanum}, ${formData.city}, ${formData.country}`;
 
-    // const users = JSON.parse(localStorage.getItem('users'))
-    // const artist = users.find(a=> a.id == currentItem.artistID)
-    const response1 = await fetch(`${apiURL}/customers/`)
-    const users = await response1.json()
-    const artist = currentItem.Artist
+    const response = await fetch(`${apiURL}/customers/`);
+    const users = await response.json();
 
-    const loggedInUser = users.find(u => u.isLoggedIn == true)
+    const loggedInUser = users.find(u => u.isLoggedIn === true);
+    const amountToBePaid = currentItem.quantity_to_buy * currentItem.price;
 
-    const amountToBePaid = currentItem.quantity_to_buy*currentItem.price
-    
+    if (loggedInUser.balance > amountToBePaid && currentItem.quantity_to_buy > 0 && currentItem.quantity_to_buy <= currentItem.available_quantity) {
+        loggedInUser.balance -= amountToBePaid;
+        currentItem.available_quantity -= currentItem.quantity_to_buy;
 
-    if(loggedInUser.balance>amountToBePaid && currentItem.quantity_to_buy > 0 && currentItem.quantity_to_buy <= currentItem.available_quantity){
-        loggedInUser.balance-=amountToBePaid
-        currentItem.available_quantity-=currentItem.quantity_to_buy
-        currentItem.sold += currentItem.quantity_to_buy
-        //Update available quantity
-        const itemIndex = items.findIndex(item => item.ID == currentItem.ID);
-        if (itemIndex !== -1) {
-            items[itemIndex] =currentItem;
-        }else{
-            alert("item not found.")
-        }
-        // localStorage.setItem('items', JSON.stringify(items))
 
-        //Update purchase/sale histories
-        // loggedInUser.purchaseHistory.push(currentItem)
-        // if(artist){
-        //     artist.soldItems.push(currentItem)
-        // }
-        // else{
-        //     console.log("artist not found.");
-        // }
-        // currentItem.clients.push(loggedInUser.username)
+        const itemUpdate = {
+            title: currentItem.title,
+            price: currentItem.price,
+            currency: currentItem.currency,
+            description: currentItem.description,
+            image_url: currentItem.image_url,
+            available_quantity: currentItem.available_quantity,
+            quantity_to_buy: 0 
+        };
+        console.log(itemUpdate);
+        console.log(loggedInUser);
+        const transaction = {
+            userId: loggedInUser.id,
+            itemId: currentItem.id,
+            quantity: currentItem.quantity_to_buy,
+            totalPrice: amountToBePaid,
+            location: location
+        };
 
-        // localStorage.setItem('users', JSON.stringify(users))
-        // localStorage.setItem('items', JSON.stringify(items))
-        await fetch(`${apiURl}/transactions/${currentItem.id}`,
+        await fetch(`${apiURL}/items/${currentItem.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': "application/json" },
+            body: JSON.stringify(itemUpdate)
+        });
+        
+        await fetch(`${apiURL}/customers/${loggedInUser.id}`,
                 {
                     method: 'PUT',
                     headers: { 'Content-Type': "application/json", },
-                    body: JSON.stringify(currentItem)
+                    body: JSON.stringify(loggedInUser)
                 });
-        
-        // const currentItemId = items.findIndex( i => i.id == currentItem.id);
-        // const clientIndex = users.findIndex(u => u.username == loggedInUser.username);
-        // users[clientIndex] = loggedInUser;
 
-        alert(`Purchase sucessful\nNew balance: ${loggedInUser.balance}\nNew available quantity: ${currentItem.available_quantity}`)
-        window.location.href = `/html/main.html`
-    }
-    else{
-        alert("Insufficient balance.")
+        const transactionResponse = await fetch(`${apiURL}/customers/${loggedInUser.id}/transactions`, {
+            method: 'POST',
+            headers: { 'Content-Type': "application/json" },
+            body: JSON.stringify(transaction)
+        });
+
+        if(!customerResponse.ok){
+            console.log("Faled to update customer");
+        }
+        if(!transactionResponse.ok){
+            console.log("Failed to post a trsnaction");
+        }
+
+        alert(`Purchase successful\nNew balance: ${loggedInUser.balance}\nNew available quantity: ${currentItem.available_quantity}`);
+        window.location.href = `/public/html/main.html`;
+    } else {
+        alert("Insufficient balance.");
     }
 }
+
 
 function formToObject(form){
     const formData = new FormData(form)

@@ -1,4 +1,4 @@
-const apiURl = "http://localhost:3000/api"
+const apiURL = "http://localhost:3000/api"
 let users = [];
 
 const loginFORM = document.querySelector("#login-form");
@@ -41,7 +41,7 @@ async function handleLogin(e) {
         if (userExists.password === user.password) {
             userExists.isLoggedIn = true
             alert(`Login successful.`);
-            await fetch(`${apiURl}/customers/${userExists.id}`,
+            await fetch(`${apiURL}/customers/${userExists.id}`,
                 {
                     method: 'PUT',
                     headers: { 'Content-Type': "application/json", },

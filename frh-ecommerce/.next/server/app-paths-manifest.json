@@ -1,7 +1,8 @@
 {
+  "/page": "app/page.js",
   "/api/customers/route": "app/api/customers/route.js",
-  "/api/customers/[id]/route": "app/api/customers/[id]/route.js",
-  "/api/categories/route": "app/api/categories/route.js",
+  "/api/customers/[id]/transactions/route": "app/api/customers/[id]/transactions/route.js",
+  "/api/items/[id]/route": "app/api/items/[id]/route.js",
   "/api/items/route": "app/api/items/route.js",
-  "/api/items/[id]/route": "app/api/items/[id]/route.js"
+  "/api/customers/[id]/route": "app/api/customers/[id]/route.js"
 }
