@@ -3,9 +3,10 @@ import EcommerceRepo from "@/app/repo/frh-ecommerce-repo.js"
 
 // GET specific item
 export async function GET(request, {params}) {
+    console.log("inside get");
     const itemID = parseInt(params.id)
     const message = await EcommerceRepo.getItemById(itemID)
-    return Response.json({ message }, { status: 200 })
+    return Response.json(message, { status: 200 })
 }
 
 // Update item

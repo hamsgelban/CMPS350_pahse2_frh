@@ -274,7 +274,7 @@ class EcommerceRepo {
     async getItemById(id){
 
         try {
-            return prisma.customer.findUnique(
+            return prisma.item.findUnique(
                 {
                     where: { id },
                     include: {Artist: true, Category: true}

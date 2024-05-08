@@ -96,13 +96,14 @@ function sortItemsByPrice(order) {
 // This function will be called when a card is clicked.
 function navigateToItemDetail(itemId) {
     console.log("INSIDE FUNC");
+    console.log(itemId);
     window.location.href = `/public/html/item_details.html?id=${itemId}`
 }
 
 function showItems(itemsList) {
     const mappedItems = itemsList.map(
         item => `
-        <div class="card" data-id="${item.ID}" onclick="navigateToItemDetail('${item.ID}')">
+        <div class="card" data-id="${item.id}" onclick="navigateToItemDetail('${item.id}')">
             <img src="${item.image_url}" alt="${item.title}'s thumbnail">
             <div class="item-properties">
                 <p> <span class="titles">Title:</span> ${item.title}</p>

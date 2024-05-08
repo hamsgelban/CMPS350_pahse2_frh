@@ -1,3 +1,4 @@
+const apiURL = "http://localhost:3000/api"
 const itemDetailsDIV = document.querySelector("#main")
 const header = document.querySelector("#header")
 const nav = document.querySelector("#nav")
@@ -5,17 +6,14 @@ const nav = document.querySelector("#nav")
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const itemId = urlParams.get('id'); // Get the 'id' query parameter.
+    console.log(itemId);
 
     if (itemId) {
-        const items = JSON.parse(localStorage.getItem('items'));
-        const item = items.find(i => i.ID == itemId);
-        if (item) {
-                
-            displayItemDetail(item);
-        
-        } else {
-            console.error('Item not found');
-        }
+        const response = await fetch(`${apiURL}/items/${itemId}`)
+        // log.console(response)
+        const item = await response.json()
+        console.log(item);
+        displayItemDetail(item)
     }
 });
 
@@ -31,10 +29,10 @@ function displayItemDetail(item) {
                 <p class="item-price">Price: ${item.price}</p>
                 <section class="info">
                     <p class="info-title">Information</p>
-                    <p>Category: ${item.category}</p>
-                    <p>ID: ${item.ID}</p>
+                    <p>Category: ${item.Category.name}</p>
+                    <p>ID: ${item.id}</p>
                     <P>Description: ${item.description}</P>
-                    <p>Artist: ${item.artist}</p>
+                    <p>Artist: ${item.Artist.name}</p>
                 </section>
                 <button id="purchase">Purchase</button>
             </section>
