@@ -9,17 +9,19 @@ const ascDD = document.querySelector("#price-asc")
 const descDD = document.querySelector("#price-desc")
 
 const params = new URLSearchParams(window.location.search);
-// const parameterValue = params.get('parameter');
-// console.log(parameterValue);
-// if (parameterValue) {
-//     searchBAR.value = parameterValue;
-//     handleSearchBar();
-// }
+const parameterValue = params.get('parameter');
+
+
+if (parameterValue) {
+    searchBAR.value = parameterValue;
+    handleSearchBar();
+}
 
 searchBAR.addEventListener('input', handleSearchBar);
 ascDD.addEventListener('click', () => sortItemsByPrice('asc'));
 descDD.addEventListener('click', () => sortItemsByPrice('desc'));
 
+let categoryId;
 
 // Add event listener to load the items
 document.addEventListener('DOMContentLoaded', async () => {
@@ -34,17 +36,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const navHTML = await navResponse.text()
         nav.innerHTML = navHTML
 
-        // const urlParams = new URLSearchParams(window.location.search)
-        // const categoryId = urlParams.get('id')
+        const urlParams = new URLSearchParams(window.location.search)
+        categoryId = urlParams.get('id')
     
         handleLoadItems()
-
-        // if (categoryId) {
-        //     handleFilter(categoryId)
-        // }
-        // else{
-        // showItems(items)
-        // }
     
     } catch (error) {
         // console.log("items:", items);
@@ -79,7 +74,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 async function handleLoadItems() {
-    let items = [];  // Declare items locally
+    // let items = [];  // Declare items locally
+    // const categoryId = params.get('id')
     try {
         const response = await fetch('http://localhost:3000/api/items');
         if (!response.ok) {
@@ -90,10 +86,12 @@ async function handleLoadItems() {
 
         if (!Array.isArray(items)) {
             throw new Error("Received data is not an array");
-        }
-        handleFilter(categoryId);  
+        }    
     } catch (error) {
         console.error("Error fetching items:", error);
+    }
+    if(categoryId){
+        handleFilter(categoryId);  
     }
     showItems(items);
 }
@@ -152,33 +150,32 @@ function handleFilter(categoryId){
     } else if(categoryId == 5){
         filter="digital";
     }
-    console.log(filter);
+    // console.log(filter);
     const filteredItems = items.filter(item => {
         return item.category && typeof item.category === 'string' && item.category.toLowerCase().includes(filter);
     });
-    console.log(`Filtered items: ${filteredItems.length}`);
+    // console.log(`Filtered items: ${filteredItems.length}`);
     showItems(filteredItems);
 }
 
 
 function handleSearchBar() {
-    console.log("inside handleSearchBar");
+    // console.log("inside handleSearchBar");
     const filter = searchBAR.value.toLowerCase().trim()
-    console.log("filter word is : ",filter);
+    // console.log("filter word is : ",filter);
     if (filter) {
-        console.log("inside filter if");
+        // console.log("inside filter if");
         const filteredItems = items.filter(item => {
             // Safe check for title
             const titleMatch = item.title && typeof item.title === 'string' ? item.title.toLowerCase().includes(filter) : false;
-            const categoryMatch = item.category && typeof item.category === 'string' ? item.category.toLowerCase().includes(filter) : false;
-            const artistMatch = item.artist && typeof item.artist === 'string' ? item.artist.toLowerCase().includes(filter) : false;
+            const categoryMatch = item.Category.name && typeof item.Category.name === 'string' ? item.Category.name.toLowerCase().includes(filter) : false;
+            const artistMatch = item.Artist.name && typeof item.Artist.name === 'string' ? item.Artist.name.toLowerCase().includes(filter) : false;
 
             return titleMatch || categoryMatch || artistMatch
         });
         console.log(filteredItems);
         showItems(filteredItems);
     } else {
-        console.log("inside filter else");
         showItems(items) // Show all books when there's no filter
     }
 }
