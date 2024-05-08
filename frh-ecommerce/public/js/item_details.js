@@ -6,13 +6,10 @@ const nav = document.querySelector("#nav")
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const itemId = urlParams.get('id'); // Get the 'id' query parameter.
-    console.log(itemId);
 
     if (itemId) {
         const response = await fetch(`${apiURL}/items/${itemId}`)
-        // log.console(response)
         const item = await response.json()
-        console.log(item);
         displayItemDetail(item)
     }
 });
@@ -40,7 +37,7 @@ function displayItemDetail(item) {
 
     // document.querySelector("#decreaseQuantity").addEventListener('click', () => decreaseQuantity(item.ID))
     // document.querySelector("#increaseQuantity").addEventListener('click', () => increaseQuantity(item.ID))
-    document.querySelector("#purchase").addEventListener('click', () => onPurchase(item.ID))
+    document.querySelector("#purchase").addEventListener('click', () => onPurchase(item.id))
 }
 
 function findItemAndUpdateQuantity(itemId, change) {
@@ -65,20 +62,25 @@ function increaseQuantity(itemId) {
     findItemAndUpdateQuantity(itemId, 1)
 }
 
-function onPurchase(itemId){
-    const items = JSON.parse(localStorage.getItem('items'))
-    const itemIndex = items.findIndex(i => i.ID === itemId)
+async function onPurchase(itemId){
+    // const items = JSON.parse(localStorage.getItem('items'))
+    // const itemIndex = items.findIndex(i => i.ID === itemId)
     // const amountToBePaid = items[itemIndex].quantity_to_buy*items[itemIndex].price
-    if(itemIndex !== -1) {             
-        const users = JSON.parse(localStorage.getItem('users'))
+    const response = await fetch(`${apiURL}/items/${itemId}`)
+    const item = await response.json()
+    if(item != null) {             
+        // const users = JSON.parse(localStorage.getItem('users'))
+        const response2 =  await fetch(`${apiURL}/customers/`)
+        const  users = await response2.json()
+
         const loggedInUser = users.findIndex(u => u.isLoggedIn == true)
         if(loggedInUser!=-1){
             // alert(`purchase activated, user logged in ${users[loggedInUser].username}`)
-            window.location.href = `/html/purchase.html?id=${itemId}`
+            window.location.href = `/public/html/purchase.html?id=${itemId}`
         }
         else{
             alert(`Please login-in before purchasing an item.`)
-            window.location.href = `/html/login.html?id=${itemId}`
+            window.location.href = `/public/html/login.html?id=${itemId}`
             
         }
     }

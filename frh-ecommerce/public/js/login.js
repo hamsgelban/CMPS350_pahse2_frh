@@ -1,4 +1,4 @@
-
+const apiURl = "http://localhost:3000/api"
 let users = [];
 
 const loginFORM = document.querySelector("#login-form");
@@ -10,15 +10,16 @@ loginFORM.addEventListener('submit', handleLogin);
 document.addEventListener('DOMContentLoaded', async () => {   
 
     try {
-        localStorage.setItem('lastSearchTerm', null);
-        users = JSON.parse(localStorage.getItem('users'))
+        // localStorage.setItem('lastSearchTerm', null);
+        const response = await fetch(`${apiURl}/customers/`)
+        users = await response.json()
     
     } catch (error) {
         console.error("Failed to load users:", error);
     }
 });
 
-function handleLogin(e) {
+async function handleLogin(e) {
     e.preventDefault(); // Prevent the default form submission behavior
 
     const formData = new FormData(e.target);
@@ -38,11 +39,15 @@ function handleLogin(e) {
         return;
     } else {
         if (userExists.password === user.password) {
-            // alert(`Login successful.`);
             userExists.isLoggedIn = true
-            localStorage.setItem('users', JSON.stringify(users));
-
-            window.location.href = "../html/main.html";
+            alert(`Login successful.`);
+            await fetch(`${apiURl}/customers/${userExists.id}`,
+                {
+                    method: 'PUT',
+                    headers: { 'Content-Type': "application/json", },
+                    body: JSON.stringify(userExists)
+                });
+            window.location.href = "/public/html/main.html";
         } else {
             alert(`Incorrect Password. Try Again.`);
             return;
