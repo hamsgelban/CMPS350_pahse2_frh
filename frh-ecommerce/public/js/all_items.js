@@ -1,4 +1,4 @@
-
+const apiURL = "http://localhost:3000/api"
 let items = []
 
 const itemsDIV = document.querySelector("#all-items") 
@@ -112,7 +112,7 @@ function showItems(itemsList) {
                 <p> <span class="titles">Price:</span> ${item.price}</p>
                 <p> <span class="titles">Availability:</span> ${item.available_quantity}</p>
             </div>
-            <button class="purchaseBTN" id="purchasebutton" onclick="onPurchase('${item.ID}')">Purchase</button>
+            <button class="purchaseBTN" id="purchasebutton" onclick="onPurchase('${item.id}')">Purchase</button>
         </div>
         `
     ).join('\n');
@@ -159,24 +159,21 @@ function handleSearchBar() {
 
 
 
-function onPurchase(itemId){
+async function onPurchase(itemId){
+    const response = await fetch(`${apiURL}/items/${itemId}`)
+    const item = await response.json()
+    if(item != null) {             
+        const response2 =  await fetch(`${apiURL}/customers/`)
+        const  users = await response2.json()
 
-    const items = JSON.parse(localStorage.getItem('items'))
-    const itemIndex = items.findIndex(i => i.ID === itemId)
-
-    if(itemIndex !== -1) {             
-
-        const users = JSON.parse(localStorage.getItem('users'))
-        const loggedInUser = users.findIndex(u => u.isLoggedIn === true)
-
+        const loggedInUser = users.findIndex(u => u.isLoggedIn == true)
         if(loggedInUser!=-1){
-            // alert(`purchase activated, user logged in ${users[loggedInUser].username}`)
-            window.location.href = `/html/purchase.html?id=${itemId}`
+            window.location.href = `/public/html/purchase.html?id=${itemId}`
         }
         else{
-
             alert(`Please login-in before purchasing an item.`)
-            window.location.href = `/public/html/login.html`
+            window.location.href = `/public/html/login.html?id=${itemId}`
+            
         }
     }
 }

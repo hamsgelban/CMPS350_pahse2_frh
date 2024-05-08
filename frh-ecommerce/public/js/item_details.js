@@ -63,19 +63,14 @@ function increaseQuantity(itemId) {
 }
 
 async function onPurchase(itemId){
-    // const items = JSON.parse(localStorage.getItem('items'))
-    // const itemIndex = items.findIndex(i => i.ID === itemId)
-    // const amountToBePaid = items[itemIndex].quantity_to_buy*items[itemIndex].price
     const response = await fetch(`${apiURL}/items/${itemId}`)
     const item = await response.json()
     if(item != null) {             
-        // const users = JSON.parse(localStorage.getItem('users'))
         const response2 =  await fetch(`${apiURL}/customers/`)
         const  users = await response2.json()
 
         const loggedInUser = users.findIndex(u => u.isLoggedIn == true)
         if(loggedInUser!=-1){
-            // alert(`purchase activated, user logged in ${users[loggedInUser].username}`)
             window.location.href = `/public/html/purchase.html?id=${itemId}`
         }
         else{
