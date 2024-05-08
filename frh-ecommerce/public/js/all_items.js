@@ -1,9 +1,3 @@
-// import frhEcommerceRepo from "/app/repo/frh-ecommerce-repo";
-// const itemsURL = "/json/items.json";
-//  import frhEcommerceRepo from "/app/repo/frh-ecommerce-repo.js"
-// import frhRepo from "@/public/js/repo/frh-repo"
-// import frhRepo from "/public/js/repo/frh-repo.js" // Absolute path from the root
-
 
 let items = []
 
@@ -97,12 +91,11 @@ async function handleLoadItems() {
         if (!Array.isArray(items)) {
             throw new Error("Received data is not an array");
         }
-        handleFilter(categoryId);  // Assume categoryId is defined elsewhere
+        handleFilter(categoryId);  
     } catch (error) {
         console.error("Error fetching items:", error);
-        // Items is already an empty array, no need to set it again
     }
-    showItems(items);  // Ensure this is outside the 'if' so it executes in all cases
+    showItems(items);
 }
 
 function setSearchBarValueAndTriggerSearch(value) {
@@ -128,8 +121,8 @@ function showItems(itemsList) {
             <img src="${item.image_url}" alt="${item.title}'s thumbnail">
             <div class="item-properties">
                 <p> <span class="titles">Title:</span> ${item.title}</p>
-                <p> <span class="titles">Artist:</span> ${item.artist}</p>
-                <p> <span class="titles">Category:</span> ${item.category}</p>
+                <p> <span class="titles">Artist:</span> ${item.Artist.name}</p>
+                <p> <span class="titles">Category:</span> ${item.Category.name}</p>
                 <p> <span class="titles">Price:</span> ${item.price}</p>
                 <p> <span class="titles">Availability:</span> ${item.available_quantity}</p>
             </div>

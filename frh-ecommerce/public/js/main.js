@@ -1,8 +1,5 @@
-// const categoriesURL = "/json/categories.json"
-// const itemsURL = "/json/items.json"
-// const usersURL = "/json/users.json"
 
-const apiURL = "http://localhost:3000/app/api"
+const apiURL = "http://localhost:3000/api"
 
 const header = document.querySelector("#header")
 const nav = document.querySelector("#nav")
@@ -18,15 +15,6 @@ const searchText = document.querySelector('#searchBar');
 categoryLINK.addEventListener("click", showCategoriesDROPDOWN)
 profileB.addEventListener('click', profileCheck)
 
-// const profileB = document.querySelector('#profile');
-// searchBar.addEventListener("keydown", function(event) {
-//     if (event.key === "Enter" || event.keyCode === 13) {
-//         // Execute your function here
-//         // For example:
-//         event.preventDefault()
-//         searchFunction();
-//     }
-// });
 
 
 let categories =[]
@@ -36,13 +24,10 @@ let users =[]
 // Add event listener to load the items
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        // Loading categories into local storage
+        // Loading categories from prisma DB
         loadCategories()
 
-        //loading items into local storage
-        loadItems()
-
-        //loading users into local storage
+        //loading users from prisma DB
         loadUsers()
         
         showCategories(categories)
@@ -57,32 +42,28 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Function to load categories
 async function loadCategories() {
-    if (localStorage.getItem('categories')) {
-        categories = JSON.parse(localStorage.getItem('categories'));
-    } else {
-        const response = await fetch(categoriesURL);
-        categories = await response.json();
-        localStorage.setItem('categories', JSON.stringify(categories));
+    try{
+        const response = await fetch(`${apiURL}/categories`)
+        if (!response.ok) {
+            throw new Error("Failed to fetch: " + response.statusText);
+        }
+        categories = await response.json()
+    }catch(error){
+        console.error("Error fetching categories:", error);
     }
-    return categories;
-}
-
-// Function to load items
-async function loadItems() {
-    let items;
-    if (!localStorage.getItem('items')) {
-        const response = await fetch(itemsURL);
-        items = await response.json();
-        localStorage.setItem('items', JSON.stringify(items));
-    }
+    showCategories(categories)
 }
 
 // Function to load users
 async function loadUsers() {
-    if (!localStorage.getItem('users')) {
-        const response = await fetch(usersURL);
-        users = await response.json();
-        localStorage.setItem('users', JSON.stringify(users));
+    try{
+        const response = await fetch(`${apiURL}/customers`)
+        if (!response.ok) {
+            throw new Error("Failed to fetch: " + response.statusText);
+        }
+        users = await response.json()
+    }catch(error){
+        console.error("Error fetching users:", error);
     }
 }
 
@@ -104,7 +85,7 @@ function showCategories(categories){
 }
 
 function navigateToFilteredItems(categoryId){
-    window.location.href = `/html/all_Items.html?id=${categoryId}`
+    window.location.href = `/public/html/all_Items.html?id=${categoryId}`
 }
 
 async function updateLoginLink() {
@@ -151,7 +132,7 @@ function handleLogout(loggedInUser) {
 }
 
 function handleLogin() {
-    window.location.href = "/html/login.html"
+    window.location.href = "/public/html/login.html"
 }
 
 function showCategoriesDROPDOWN(){  
@@ -163,7 +144,7 @@ function showCategoriesDROPDOWN(){
 }
 
 function navigateToFilteredItems(categoryId){
-    window.location.href = `/html/all_Items.html?id=${categoryId}`
+    window.location.href = `/public/html/all_Items.html?id=${categoryId}`
 }
 
 function profileCheck() {
@@ -178,11 +159,11 @@ function profileCheck() {
         const user = users[loggedInUser]
         if(user.type=="customer"){
             //Handle customer here
-            window.location.href = "/html/history.html"
+            window.location.href = "/public/html/history.html"
         }
         else if(user.type=="seller"){
             //Handle seller here
-            window.location.href = "/html/historySeller.html"
+            window.location.href = "/public/html/historySeller.html"
         }
         else{
             alert("An error occured")
@@ -190,11 +171,6 @@ function profileCheck() {
     }
     else{
         alert("Login before proceeding.")
-        window.location.href ="/html/login.html"
+        window.location.href ="/public/html/login.html"
     }
 }
-
-// function searchFunction() {
-//     const parameterValue = searchText.value;
-//     window.location.href = `/html/all_Items.html?parameter=${parameterValue}`;
-// }

@@ -262,7 +262,9 @@ class EcommerceRepo {
     async getItems(){
 
         try {
-            return prisma.item.findMany();
+            return prisma.item.findMany({
+                include: {Artist: true, Category: true}
+            });
         } catch (error) {
             return { error: error.message }
         }
@@ -274,7 +276,8 @@ class EcommerceRepo {
         try {
             return prisma.customer.findUnique(
                 {
-                    where: { id }
+                    where: { id },
+                    include: {Artist: true, Category: true}
                 }
             );
         } catch (error) {
@@ -292,6 +295,7 @@ class EcommerceRepo {
                 where: {
             title: title
                 },
+                include: {Artist: true, Category: true}
             });
         } catch (error) {
             return { error: error.message }
@@ -306,6 +310,7 @@ class EcommerceRepo {
                 where: {
                 price: price,
                 },
+                include: {Artist: true, Category: true}
             });
         } catch (error) {
             return { error: error.message }
@@ -317,7 +322,8 @@ class EcommerceRepo {
 
         try {
             return await prisma.item.findMany({
-                where: {description : {contains : description}}
+                where: {description : {contains : description}},
+                include: {Artist: true, Category: true}
             });
         } catch (error) {
             return { error: error.message }
@@ -329,7 +335,8 @@ class EcommerceRepo {
 
         try {
             return await prisma.item.findMany({
-                where: {Category:category}
+                where: {Category:category},
+                include: {Artist: true, Category: true}
             });
         } catch (error) {
             return { error: error.message }
@@ -342,10 +349,11 @@ class EcommerceRepo {
         try {
             const artist = prisma.artist.findFirst(
                 {where: {name}
-                }
+                },
             );
             return await prisma.item.findMany({
-                where: {Artist:artist}
+                where: {Artist:artist},
+                include: {Artist: true, Category: true}
             });
         } catch (error) {
             return { error: error.message }
