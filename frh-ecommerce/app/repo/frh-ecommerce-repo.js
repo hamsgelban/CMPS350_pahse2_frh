@@ -19,7 +19,7 @@ class EcommerceRepo {
     async getCategoryById(id){
         try {
             return prisma.category.findUnique(
-                {where:id}
+                { where: { id }}
             );
         } catch (error) {
             return { error: error.message }
@@ -42,9 +42,10 @@ class EcommerceRepo {
     async updateCategory(category,id){
 
         try {
-            return prisma.artist.update(
-                {data:category},
-                {where:id}
+            return prisma.artist.update({
+                data: category,
+                where: {id}
+            }
             )
         } catch (error) {
             return { error: error.message }
@@ -56,7 +57,7 @@ class EcommerceRepo {
 
         try {
             return prisma.artist.delete(
-                {where:id}
+                { where: {id}}
             )
         } catch (error) {
             return { error: error.message }
@@ -79,7 +80,7 @@ class EcommerceRepo {
         try {
             return prisma.artist.findUnique(
                 {
-                    where: name
+                    where: {name}
                 }
             )
         } catch (error) {
@@ -91,7 +92,7 @@ class EcommerceRepo {
         try {
             return prisma.artist.findUnique(
                 {
-                    where: id
+                    where: {id}
                 }
             )
         } catch (error) {
@@ -114,10 +115,10 @@ class EcommerceRepo {
     async updateArtist(artist,id){
 
         try {
-            return prisma.artist.update(
-                {data:artist},
-                {where:id}
-            )
+            return prisma.artist.update({
+                data: artist,
+                where: {id}
+        })
         } catch (error) {
             return { error: error.message }
         }
@@ -129,7 +130,7 @@ class EcommerceRepo {
 
         try {
             return prisma.artist.delete(
-                {where:id}
+                {where:{id}}
             )
         } catch (error) {
             return { error: error.message }
@@ -158,6 +159,7 @@ class EcommerceRepo {
 
     //     } 
     try{
+        const item = await this.getItemById(id)
         return prisma.artist.update(
             {where:id},
             //should pass an item -> create addItem methode and add the item to item list , use it here
@@ -187,7 +189,7 @@ class EcommerceRepo {
     async getCustomerById(id){
         try {
             return prisma.customer.findUnique({
-                where: id
+                where: { id }
             });
         } catch (error) {
             return { error: error.message }
@@ -198,7 +200,7 @@ class EcommerceRepo {
     async getCustomerByName(name){
         try {
             return prisma.customer.findFirst({
-                where: name
+                where: { name }
             });
         } catch (error) {
             return { error: error.message }
@@ -208,7 +210,7 @@ class EcommerceRepo {
     async getCustomerByUsername(username){
         try {
             return prisma.customer.findUnique({
-                where: username
+                where: { username }
             });
         } catch (error) {
             return { error: error.message }
@@ -219,7 +221,7 @@ class EcommerceRepo {
 
         try {
             return prisma.customer.create(
-                {data:customer}
+                {data: customer}
             )
         } catch (error) {
             return { error: error.message }
@@ -231,10 +233,10 @@ class EcommerceRepo {
     async updateCustomer(customer,id){
 
         try {
-            return prisma.customer.update(
-                {data:customer},
-                {where:id}
-            )
+            return prisma.customer.update({
+                data: customer,
+                where: {id}
+        })
         } catch (error) {
             return { error: error.message }
         }
@@ -246,7 +248,7 @@ class EcommerceRepo {
 
         try {
             return prisma.customer.delete(
-                {where:id}
+                { where: {id}}
             )
         } catch (error) {
             return { error: error.message }
@@ -260,7 +262,7 @@ class EcommerceRepo {
     async getItems(){
 
         try {
-            return prisma.customer.findMany();
+            return prisma.item.findMany();
         } catch (error) {
             return { error: error.message }
         }
@@ -271,7 +273,9 @@ class EcommerceRepo {
 
         try {
             return prisma.customer.findUnique(
-                {where:id}
+                {
+                    where: { id }
+                }
             );
         } catch (error) {
             return { error: error.message }
@@ -284,9 +288,9 @@ class EcommerceRepo {
     async getItemByTitle(title){
 
         try {
-            return await prisma.item.findUnique({
+            return await prisma.item.findFirst({
                 where: {
-            title: title,
+            title: title
                 },
             });
         } catch (error) {
@@ -321,12 +325,9 @@ class EcommerceRepo {
 
     }
 
-    async getItemByCategory(name){
+    async getItemByCategory(category){
 
         try {
-            const category = prisma.category.findUnique(
-                {where:name}
-            );
             return await prisma.item.findMany({
                 where: {Category:category}
             });
@@ -339,8 +340,8 @@ class EcommerceRepo {
     async getItemByArtist(name){
 
         try {
-            const artist = prisma.artist.findUnique(
-                {where:name
+            const artist = prisma.artist.findFirst(
+                {where: {name}
                 }
             );
             return await prisma.item.findMany({
@@ -365,14 +366,12 @@ class EcommerceRepo {
     }
 
 
-    async updateItem(id,item){
+    async updateItem(item, id){
 
         try {
             return await prisma.item.update({
-                where: {
-            id: id,
-                },
                 data: item,
+                where: {id}
             });
         } catch (error) {
             return { error: error.message }
@@ -386,7 +385,7 @@ class EcommerceRepo {
         try {
             return await prisma.item.delete({
                 where: {
-                id: itemId,
+                id
                 },
             });
         } catch (error) {
@@ -439,19 +438,21 @@ class EcommerceRepo {
     // }
     async addTransaction(customerId, transaction) {
             
-            const customer = await prisma.customer.findUnique({
-                where: { id: parseInt(customerId) }
-            });
-    
+            const customer = await this.getCustomerById(customerId)
+            const item = await this.getItemById(transaction.itemId)
+
+            console.log(customer.balance);
             try {
-            if (transaction.totalPrice < customer.balance) {
-                customer.balance -= parseInt(transaction.totalPrice);
+            if (transaction.totalPrice <= customer.balance) {
+                customer.balance -= (transaction.totalPrice);
+                item.available_quantity--;
             }
             else {
                 return { error: "Insufficient Balance" };
             }
 
-            this.updateCustomer(customer, parseInt(customerId))
+            await this.updateCustomer(customer, customerId)
+            await this.updateItem(item, item.id)
     
             return prisma.transaction.create({ data: transaction })
         } catch (error) {
@@ -465,9 +466,9 @@ class EcommerceRepo {
 
         try {
             return await prisma.transaction.update({
-                where: id},
-                {data:transaction}
-            );
+                data: transaction,
+                where: {id}
+        })
         } catch (error) {
             return { error: error.message }
         }
@@ -479,8 +480,7 @@ class EcommerceRepo {
 
         try {
             return await prisma.transaction.delete({
-                where: {
-                id}
+                where: {id}
             });
         } catch (error) {
             return { error: error.message }

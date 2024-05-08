@@ -5,7 +5,7 @@ import EcommerceRepo from "@/app/repo/frh-ecommerce-repo.js"
 export async function GET(request, {params}) {
     const customerID = parseInt(params.id)
     const message = await EcommerceRepo.getCustomerById(customerID)
-    return Response.json({ message }, { status: 200 })
+    return Response.json( message , { status: 200 })
 }
 
 // Update customer
