@@ -55,27 +55,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// async function handleLoadItems(){
-//     try{
-//         // const urlParams = new URLSearchParams(window.location.search)
-//         // const categoryId = urlParams.get('id')
-//         items = await frhRepo.getItems()
-//         console.log(items)
-//         // if (categoryId) {
-//         //     handleFilter(categoryId)
-//         // }
-//         // else{
-//         showItems(items)
-//         // }
-//     }catch(e){
-//         console.log(e);
-//     }
-// }
-
 
 async function handleLoadItems() {
-    // let items = [];  // Declare items locally
-    // const categoryId = params.get('id')
     try {
         const response = await fetch('http://localhost:3000/api/items');
         if (!response.ok) {
@@ -92,8 +73,9 @@ async function handleLoadItems() {
     }
     if(categoryId){
         handleFilter(categoryId);  
-    }
+    }else{
     showItems(items);
+    }
 }
 
 function setSearchBarValueAndTriggerSearch(value) {
@@ -137,27 +119,19 @@ function navigateToItemDetail(itemId) {
     window.location.href = `/html/item_details.html?id=${itemId}`
 }
 
-function handleFilter(categoryId){
-    let filter;
-    if(categoryId == 1){
-        filter="painting";
-    } else if(categoryId == 2){
-        filter="sculpture";
-    } else if(categoryId == 3){
-        filter="pottery";
-    } else if(categoryId == 4){
-        filter="drawing";
-    } else if(categoryId == 5){
-        filter="digital";
-    }
-    // console.log(filter);
+function handleFilter(categoryId) {
+    console.log(categoryId);
+
+    const numericCategoryId = parseInt(categoryId);
+
+    // Filter items where the item's category ID matches the given category ID
     const filteredItems = items.filter(item => {
-        return item.category && typeof item.category === 'string' && item.category.toLowerCase().includes(filter);
+        return item.Category && item.Category.id === numericCategoryId;
     });
-    // console.log(`Filtered items: ${filteredItems.length}`);
+
+    // console.log(`Filtered items: ${filteredItems}`);
     showItems(filteredItems);
 }
-
 
 function handleSearchBar() {
     // console.log("inside handleSearchBar");
