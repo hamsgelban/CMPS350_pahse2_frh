@@ -86,13 +86,13 @@ export default function Admin() {
           <h1 className={styles.header}>View statistics</h1>
           <div className={styles.cards}>
               <div className={styles.tableCard}>
-                <Card></Card>
+              <Table></Table>
               </div>
               <div className={styles.tableCard}><Table></Table></div>
-              <div className={styles.tableCard}>table3</div>
-              <div className={styles.tableCard}>table4</div>
-              <div className={styles.tableCard}>table5</div>
-              <div className={styles.tableCard}>table6</div>
+              <div className={styles.tableCard}><Table></Table></div>
+              <div className={styles.tableCard}><Card></Card></div>
+              <div className={styles.tableCard}><Card></Card></div>
+              <div className={styles.tableCard}><Card></Card></div>
           </div>
         </div>
 
