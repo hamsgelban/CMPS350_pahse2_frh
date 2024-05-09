@@ -20,14 +20,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       const navHTML = await navResponse.text()
       nav.innerHTML = navHTML
 
-      loadItems()
+      await loadItems()
       
       const urlParams = new URLSearchParams(window.location.search);
       itemId = parseInt(urlParams.get('id'));
       console.log(itemId);
 
       if(itemId){
-        handleUpdate(itemId)
+        await handleUpdate(itemId)
       }
   
   } catch (error) {
@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function loadItems() {
-  // items = JSON.parse(localStorage.getItem('items'))
   try {
     const response = await fetch(`${apiURL}/items`);
     if (!response.ok) {
@@ -93,19 +92,24 @@ async function updateItem(itemId, updatedItem) {
   console.log(`Item: ${updatedItem.available_quantity}`)
   
   try {
-      const response = await fetch(`${apiURL}/items/${itemId}`, {
-          method: 'PUT',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(updatedItem)
-      });
-
-      console.log(response);
-      if (!response.ok) {
-          throw new Error("Failed to update item: " + response.statusText);
-      }
-
-      console.log("Item updated");
-      // window.location.href = "/public/html/historySeller.html";
+    const response = await fetch(`${apiURL}/items/${itemId}`, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(updatedItem)
+    });
+    
+    if (!response.ok) {
+        throw new Error("Failed to update item: " + response.statusText);
+    }
+    
+    response.json().then(updatedData => {
+        console.log("Item updated", updatedData);
+        // Redirect or further action
+    }).catch(error => {
+        console.error("Error reading response:", error);
+    });
+    
+      window.location.href = "/public/html/historySeller.html";
   } catch (error) {
       console.error("Error updating item:", error);
       alert("Failed to update item: " + error.message);
@@ -150,17 +154,20 @@ function mapIdToCategory(categoryId) {
 
 
 function formToObject(form) {
-  const formData = new FormData(form);
-  const data = {};
-  formData.forEach((value, key) => {
-      if (key === "category") { // Assuming you need to map category names to IDs
-          data["categoryId"] = mapCategoryToId(value);
-      } else {
-          data[key] = value;
-      }
-  });
-  return data;
+    const formData = new FormData(form);
+    const data = {};
+    formData.forEach((value, key) => {
+        if (key === "category") { // Handle category mapping
+            data["categoryId"] = mapCategoryToId(value);
+        } else if (key === "available_quantity" || key === "price") { // Convert numeric values to integers
+            data[key] = parseInt(value, 10);
+        } else {
+            data[key] = value;
+        }
+    });
+    return data;
 }
+
 
 function mapCategoryToId(categoryName) {
   // Map category names to IDs; you would replace this with actual IDs from your database
