@@ -103,14 +103,7 @@ console.log(items)
 
             <div className={styles.artists}>
                 <h1 className={styles.header}>View artists</h1>
-                <div className={styles.cards}>
-                    <div className={styles.tableCard}>artist1</div>
-                    <div className={styles.tableCard}>artist2</div>
-                    <div className={styles.tableCard}>artist3</div>
-                    <div className={styles.tableCard}>artist4</div>
-                    <div className={styles.tableCard}>artist5</div>
-                    <div className={styles.tableCard}>artist6</div>
-                </div>
+                <div className={styles.tableCard}><ArtistTable artists={artists}/></div>
             </div>
 
             <div className={styles.customers}>
