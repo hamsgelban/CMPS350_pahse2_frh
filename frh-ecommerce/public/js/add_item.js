@@ -3,6 +3,7 @@ const apiURL = "http://localhost:3000/api"
 let items = []
 let itemOnSale =[]
 let itemId
+let loggedInUser
 
 const uploadForm = document.querySelector("#upload-form")
 uploadForm.addEventListener("submit", handleSubmit)
@@ -21,6 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       nav.innerHTML = navHTML
 
       await loadItems()
+      await getLoggedInUser()
       
       const urlParams = new URLSearchParams(window.location.search);
       itemId = parseInt(urlParams.get('id'));
@@ -48,12 +50,18 @@ async function loadItems() {
   }
 }
 
+async function getLoggedInUser(){
+    const response = await fetch(`${apiURL}/artists`);
+    const users = await response.json();
+    loggedInUser = users.find(u => u.isLoggedIn === true);
+}
+
 async function handleSubmit(e) {
   e.preventDefault();
   const formElement = e.target;
   const itemDetails = formToObject(formElement);
 
-  if (itemId != null) {
+  if (itemId >0) {
       // Handle update
       await updateItem(itemId, itemDetails);
       alert("Item updated!");
@@ -65,26 +73,33 @@ async function handleSubmit(e) {
 }
 
 async function addItem(item) {
-  try {
-      const response = await fetch(`${apiURL}/items`, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(item)
-      });
+    console.log("IN ADD ITEM");
+    item.currency = "QAR"
+    item.artistID = loggedInUser.id
+    try {
+        const response = await fetch(`${apiURL}/items`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item)
+        });
 
-      if (!response.ok) {
-          throw new Error("Failed to add item: " + response.statusText);
-      }
-      
-      console.log("Item added");
-      window.location.href = "/public/html/historySeller.html";
-  } catch (error) {
-      console.error("Error adding item:", error);
-      alert("Failed to add item: " + error.message);
-  }
+        const responseData = await response.json();  // Always read and log the JSON response
+        console.log("Response Data:", responseData);
+
+        if (!response.ok) {
+            throw new Error("Failed to add item: " + response.statusText + " - " + JSON.stringify(responseData));
+        }
+        
+        console.log("Item added");
+        // window.location.href = "/public/html/historySeller.html";
+    } catch (error) {
+        console.error("Error adding item:", error);
+        alert("Failed to add item: " + error.message);
+    }
 }
+
 
 async function updateItem(itemId, updatedItem) {
 
