@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styles from "@/app/page.module.css";
 import Top from '@/app/components/top'
 import Card from '@/app/components/card'
@@ -9,7 +9,9 @@ import ecommerceRepo from '@/app/repo/frh-ecommerce-repo'
 
 
 export default async function Admin() {
-    const items = await ecommerceRepo.totalPUrchasesPerYear();
+const items = await ecommerceRepo.totalPUrchasesPerYear();
+console.log(items)
+
     return (
         // <div className={styles.all}>
         //     <head>
@@ -89,7 +91,7 @@ export default async function Admin() {
                 <h1 className={styles.header}>View statistics</h1>
                 <div className={styles.cards}>
                     <div className={styles.tableCard}>
-                        <Table data={items}></Table>
+                        <Table></Table>
                     </div>
                     <div className={styles.tableCard}><Table></Table></div>
                     <div className={styles.tableCard}><Table></Table></div>
