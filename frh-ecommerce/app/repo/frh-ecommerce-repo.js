@@ -433,6 +433,26 @@ class EcommerceRepo {
         }
     }
 
+    async getArtistTransactions(artistId) {
+        try {
+            const transactions = await prisma.transaction.findMany({
+                where: {
+                    artwork: {
+                        artistID: artistId
+                    }
+                },
+                include: {
+                    artwork: true,
+                    customer: true
+                }
+            });
+            return transactions;
+        } catch (error) {
+            return { error: error.message };
+        }
+    }
+    
+
     // async addTransaction(customer, transaction) {
     //     transaction.id = id
     //     transaction.amount = parseInt(transaction.amount.toString());

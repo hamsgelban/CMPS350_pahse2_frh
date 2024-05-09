@@ -12,13 +12,16 @@ const totalAmountSold = document.querySelector("#totalAmount");
 const addItem = document.querySelector("#addItemButton")
 
 // Retrieve the list of users and find the currently logged-in user
-const users = JSON.parse(localStorage.getItem("users"));
-const loggedInUser = users.findIndex((u) => u.isLoggedIn == true);
+// const users = JSON.parse(localStorage.getItem("users"));
+// const loggedInUser = users.findIndex((u) => u.isLoggedIn == true);
+let users
+let loggedInUser
+loadUsers()
 
 // Extract information about items sold and items on sale from the logged-in user
-let itemsSold = users[loggedInUser].soldItems;
-let itemsOnSale = users[loggedInUser].itemsOnSale;
-let numberOfItemsSold = 0;
+// let itemsSold = users[loggedInUser].soldItems;
+// let itemsOnSale = users[loggedInUser].itemsOnSale;
+// let numberOfItemsSold = 0;
 
 // Retrieve the items from local storage
 let items = JSON.parse(localStorage.getItem("items")) 

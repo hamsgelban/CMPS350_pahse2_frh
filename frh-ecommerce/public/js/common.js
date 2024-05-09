@@ -3,25 +3,30 @@ let apiURL = "http://localhost:3000/api"
 let loginLINK;
 let profileB;
 
-// Add a listener for the DOMContentLoaded event to initialize the page once it's fully loaded
 document.addEventListener('DOMContentLoaded', async function() {
-    // Insert common elements like header and navigation into the page
     await insertCommonElements();
-    // Add an event listener to the profile button for performing profile-related checks
-    profileB.addEventListener('click', profileCheck);
+    bindEventListeners();
 });
 
-// Function to insert common elements like headers and navigation bars
-async function insertCommonElements() {
-    // Load and insert the header
-    await loadElement("header", "/public/html/common/header.html");
-    // Load and insert the navigation bar
-    await loadElement("nav", "/public/html/common/nav.html");
+function bindEventListeners() {
+    document.body.addEventListener('click', function(e) {
+        if (e.target && e.target.id === 'profile') {
+            profileCheck();
+        }
+        if (e.target && e.target.id === 'loggedIn') {
+            e.preventDefault();
+            handleLogout();
+        }
+        if (e.target && e.target.id === 'loggedOut') {
+            e.preventDefault();
+            handleLogin();
+        }
+    });
+}
 
-    // Initialize DOM element references after they have been loaded into the page
-    profileB = document.querySelector('#profile');
-    loginLINK = document.querySelector("#login");
-    // Update the login link based on user's login status
+async function insertCommonElements() {
+    await loadElement("header", "/public/html/common/header.html");
+    await loadElement("nav", "/public/html/common/nav.html");
     updateLoginLink();
 }
 
@@ -39,7 +44,14 @@ async function updateLoginLink() {
     try {
 
         const response = await fetch(`${apiURL}/customers`)
-        let users = await response.json()
+        let customers = await response.json()
+
+        const response2 = await fetch(`${apiURL}/artists`)
+        let artists = await response2.json()
+
+        let users = []
+        users.concat(customers)
+        users.concat(artists)
 
         // Find the index of the logged-in user
         const loggedInUser = users.find(u => u.isLoggedIn == true);
@@ -70,21 +82,39 @@ async function updateLoginLink() {
     }
 }
 
-// Function to handle user logout
-async function handleLogout(loggedInUser) {
-    if (loggedInUser == null) {
-        alert(`The user does not exist.`);
-        return;
-    } else {
-        // Set the user's loggedIn status to false and update prisma
-        loggedInUser.isLoggedIn = false
-        await fetch(`${apiURL}/customers/${loggedInUser.id}`,
-                {
-                    method: 'PUT',
-                    headers: { 'Content-Type': "application/json", },
-                    body: JSON.stringify(loggedInUser)
-                });
+async function handleLogout() {
+    // Fetch both customer and artist data to find the logged-in user
+    const customersResponse = await fetch(`${apiURL}/customers`);
+    const customers = await customersResponse.json();
+    const loggedInCustomer = customers.find(u => u.isLoggedIn === true);
 
+    const artistsResponse = await fetch(`${apiURL}/artists`);
+    const artists = await artistsResponse.json();
+    const loggedInArtist = artists.find(u => u.isLoggedIn === true);
+
+    let userEndpoint;
+    let user;
+
+    // Determine if the logged-in user is a customer or an artist
+    if (loggedInCustomer) {
+        userEndpoint = `${apiURL}/customers/${loggedInCustomer.id}`;
+        user = loggedInCustomer;
+    } else if (loggedInArtist) {
+        userEndpoint = `${apiURL}/artists/${loggedInArtist.id}`;
+        user = loggedInArtist;
+    } else {
+        alert("No logged in user found.");
+        return;
+    }
+
+    // Set the user's loggedIn status to false and update via the correct endpoint
+    if (user) {
+        user.isLoggedIn = false; // Modify the user object
+        await fetch(userEndpoint, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(user)
+        });
 
         alert("You have been successfully logged out.");
         // Refresh the login link to reflect the logout
@@ -92,13 +122,15 @@ async function handleLogout(loggedInUser) {
     }
 }
 
+
 // Function to redirect the user to the login page
 function handleLogin() {
     window.location.href = "/public/html/login.html";
 }
 
 async function profileCheck() {
-    // Fetch customers and artists using the already declared apiURL
+
+    // Fetch customers and artists
     const response1 = await fetch(`${apiURL}/customers`);
     const customers = await response1.json();
     

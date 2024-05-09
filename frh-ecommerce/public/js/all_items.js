@@ -46,13 +46,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error("Failed to load items:", error.JSON)
     }
 
-    if (localStorage.getItem('lastSearchTerm') != 'null'){
-        console.log("inside if statement");
-        const retrievedSearchValue = localStorage.getItem('lastSearchTerm');
-        if (retrievedSearchValue.trim() !== '') {
-            setSearchBarValueAndTriggerSearch(retrievedSearchValue);
-        }
-    }
+    // if (localStorage.getItem('lastSearchTerm') != 'null'){
+    //     console.log("inside if statement");
+    //     const retrievedSearchValue = localStorage.getItem('lastSearchTerm');
+    //     if (retrievedSearchValue.trim() !== '') {
+    //         setSearchBarValueAndTriggerSearch(retrievedSearchValue);
+    //     }
+    // }
 });
 
 
