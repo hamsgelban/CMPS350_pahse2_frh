@@ -94,6 +94,47 @@ export default function Home() {
     // </main>
 
     <>
-    <Admin></Admin></>
+
+        <div className={styles.container}>
+              <div className={styles.top}>
+                <h1>Header + nav</h1>
+              </div>
+
+              <div className={styles.side}>
+                <div className={styles.links}>
+                    <a href="" className={styles.a}> View Statistics</a>
+                    <a href="" className={styles.a}> View Artists</a>
+                    <a href="" className={styles.a}> View Customers</a>
+                </div>
+              </div>
+
+              <div className={`${styles.statistics}`}>
+                <h1>View statistics</h1>
+                <div className={styles.statTable}>
+                    <div>table1</div>
+                    <div>table2</div>
+                    <div>table3</div>
+                    <div>table4</div>
+                    <div>table5</div>
+                    <div>table6</div>
+                </div>
+              </div>
+
+              <div className={styles.artists}>
+                <h1>View artists</h1>
+              </div>
+
+              <div className={styles.customers}>
+                <h1>View customers</h1>
+              </div>
+
+              <div className={styles.footer}>
+                <h1>footer</h1>
+              </div>
+
+
+        </div>
+    
+    </>
   );
 }
