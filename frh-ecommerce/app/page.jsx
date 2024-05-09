@@ -96,72 +96,7 @@ export default function Home() {
 
     <>
 
-        <div className={styles.container}>
-              {/* <div className={styles.top}>
-                <header className={styles.headerTop}>
-                    <h1 className={styles.headerH1}>FRH</h1>
-                    <ul className={styles.headerUl}>
-                        <li><a href="#contact">Contact Us</a></li>
-                        <li id="login"></li>
-                    </ul>
-                </header>
-              </div> */}
-
-              <div className={styles.top}>
-                <Top></Top>
-              </div>
-
-              <div className={styles.side}>
-                <div className={styles.links}>
-                    <a href="" className={styles.a}> View Statistics</a>
-                    <a href="" className={styles.a}> View Artists</a>
-                    <a href="" className={styles.a}> View Customers</a>
-                </div>
-              </div>
-
-              <div className={`${styles.statistics}`}>
-                <h1 className={styles.header}>View statistics</h1>
-                <div className={styles.cards}>
-                    <div className={styles.tableCard}>table1</div>
-                    <div className={styles.tableCard}>table2</div>
-                    <div className={styles.tableCard}>table3</div>
-                    <div className={styles.tableCard}>table4</div>
-                    <div className={styles.tableCard}>table5</div>
-                    <div className={styles.tableCard}>table6</div>
-                </div>
-              </div>
-
-              <div className={styles.artists}>
-                <h1 className={styles.header}>View artists</h1>
-                <div className={styles.cards}>
-                    <div className={styles.tableCard}>artist1</div>
-                    <div className={styles.tableCard}>artist2</div>
-                    <div className={styles.tableCard}>artist3</div>
-                    <div className={styles.tableCard}>artist4</div>
-                    <div className={styles.tableCard}>artist5</div>
-                    <div className={styles.tableCard}>artist6</div>
-                </div>
-              </div>
-
-              <div className={styles.customers}>
-                <h1 className={styles.header}>View customers</h1>
-                <div className={styles.cards}>
-                    <div className={styles.tableCard}>customer1</div>
-                    <div className={styles.tableCard}>customer2</div>
-                    <div className={styles.tableCard}>customer3</div>
-                    <div className={styles.tableCard}>customer4</div>
-                    <div className={styles.tableCard}>customer5</div>
-                    <div className={styles.tableCard}>customer6</div>
-                </div>
-              </div>
-
-              <div className={styles.footer}>
-                  <p>Made by FRH</p>
-                  <p>Hams Gelban | FatemaElzahraa Elrotel | Rouaa Naim | © 2024 FRH, Inc. </p>
-              </div>
-
-
-        </div>
+<Admin></Admin>
     
     </>
   );
