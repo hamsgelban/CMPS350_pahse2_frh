@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -7,33 +7,31 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-function createData(name, calories) {
-  return { name, calories };
-}
+export default function table({ data }) {
+  
+  if (!data || data.length === 0) {
+    return <div>No data available</div>;
+  }
+  // Extract column names from the first object in the data array
+  const columns = data.length > 0 ? Object.keys(data[0]) : [];
 
-const rows = [
-  createData('Test Year 2014', 23000),
-];
-
-export default function table() {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="caption table">
-        <caption>Toatl purcahse per year</caption>
+        <caption>Total purchases per year</caption>
         <TableHead>
           <TableRow>
-            <TableCell>Year</TableCell>
-            <TableCell align="right">Total purcahse</TableCell>
+            {columns.map((column, index) => (
+              <TableCell key={index}>{column}</TableCell>
+            ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.name}>
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-
+          {data.map((row, index) => (
+            <TableRow key={index}>
+              {columns.map((column, index) => (
+                <TableCell key={index}>{row[column]}</TableCell>
+              ))}
             </TableRow>
           ))}
         </TableBody>
@@ -41,5 +39,3 @@ export default function table() {
     </TableContainer>
   );
 }
-
-

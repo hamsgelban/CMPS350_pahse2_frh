@@ -1,12 +1,15 @@
-import React from 'react';
+'use client'
+import React, { useEffect, useState } from 'react';
 import styles from "@/app/page.module.css";
-import Top from '@/app/components/top' 
-import Card from '@/app/components/card' 
-import Table from '@/app/components/table' 
+import Top from '@/app/components/top'
+import Card from '@/app/components/card'
+import Table from '@/app/components/table'
+import ecommerceRepo from '@/app/repo/frh-ecommerce-repo'
 
 
 
-export default function Admin() {
+export default async function Admin() {
+    const items = await ecommerceRepo.totalPUrchasesPerYear();
     return (
         // <div className={styles.all}>
         //     <head>
@@ -58,7 +61,7 @@ export default function Admin() {
         //     </body>
         // </div>
         <div className={styles.container}>
-        {/* <div className={styles.top}>
+            {/* <div className={styles.top}>
           <header className={styles.headerTop}>
               <h1 className={styles.headerH1}>FRH</h1>
               <ul className={styles.headerUl}>
@@ -68,64 +71,64 @@ export default function Admin() {
           </header>
         </div> */}
 
-        
 
-        <div className={styles.top}>
-          <Top></Top>
+
+            <div className={styles.top}>
+                <Top></Top>
+            </div>
+
+            <div className={styles.side}>
+                <div className={styles.links}>
+                    <a href="" className={styles.a}> View Statistics</a>
+                    <a href="" className={styles.a}> View Artists</a>
+                    <a href="" className={styles.a}> View Customers</a>
+                </div>
+            </div>
+
+            <div className={`${styles.statistics}`}>
+                <h1 className={styles.header}>View statistics</h1>
+                <div className={styles.cards}>
+                    <div className={styles.tableCard}>
+                        <Table data={items}></Table>
+                    </div>
+                    <div className={styles.tableCard}><Table></Table></div>
+                    <div className={styles.tableCard}><Table></Table></div>
+                    <div className={styles.tableCard}><Card></Card></div>
+                    <div className={styles.tableCard}><Card></Card></div>
+                    <div className={styles.tableCard}><Card></Card></div>
+                </div>
+            </div>
+
+            <div className={styles.artists}>
+                <h1 className={styles.header}>View artists</h1>
+                <div className={styles.cards}>
+                    <div className={styles.tableCard}>artist1</div>
+                    <div className={styles.tableCard}>artist2</div>
+                    <div className={styles.tableCard}>artist3</div>
+                    <div className={styles.tableCard}>artist4</div>
+                    <div className={styles.tableCard}>artist5</div>
+                    <div className={styles.tableCard}>artist6</div>
+                </div>
+            </div>
+
+            <div className={styles.customers}>
+                <h1 className={styles.header}>View customers</h1>
+                <div className={styles.cards}>
+                    <div className={styles.tableCard}>customer1</div>
+                    <div className={styles.tableCard}>customer2</div>
+                    <div className={styles.tableCard}>customer3</div>
+                    <div className={styles.tableCard}>customer4</div>
+                    <div className={styles.tableCard}>customer5</div>
+                    <div className={styles.tableCard}>customer6</div>
+                </div>
+            </div>
+
+            <div className={styles.footer}>
+                <p>Made by FRH</p>
+                <p>Hams Gelban | FatemaElzahraa Elrotel | Rouaa Naim | © 2024 FRH, Inc. </p>
+            </div>
+
+
         </div>
-
-        <div className={styles.side}>
-          <div className={styles.links}>
-              <a href="" className={styles.a}> View Statistics</a>
-              <a href="" className={styles.a}> View Artists</a>
-              <a href="" className={styles.a}> View Customers</a>
-          </div>
-        </div>
-
-        <div className={`${styles.statistics}`}>
-          <h1 className={styles.header}>View statistics</h1>
-          <div className={styles.cards}>
-              <div className={styles.tableCard}>
-              <Table></Table>
-              </div>
-              <div className={styles.tableCard}><Table></Table></div>
-              <div className={styles.tableCard}><Table></Table></div>
-              <div className={styles.tableCard}><Card></Card></div>
-              <div className={styles.tableCard}><Card></Card></div>
-              <div className={styles.tableCard}><Card></Card></div>
-          </div>
-        </div>
-
-        <div className={styles.artists}>
-          <h1 className={styles.header}>View artists</h1>
-          <div className={styles.cards}>
-              <div className={styles.tableCard}>artist1</div>
-              <div className={styles.tableCard}>artist2</div>
-              <div className={styles.tableCard}>artist3</div>
-              <div className={styles.tableCard}>artist4</div>
-              <div className={styles.tableCard}>artist5</div>
-              <div className={styles.tableCard}>artist6</div>
-          </div>
-        </div>
-
-        <div className={styles.customers}>
-          <h1 className={styles.header}>View customers</h1>
-          <div className={styles.cards}>
-              <div className={styles.tableCard}>customer1</div>
-              <div className={styles.tableCard}>customer2</div>
-              <div className={styles.tableCard}>customer3</div>
-              <div className={styles.tableCard}>customer4</div>
-              <div className={styles.tableCard}>customer5</div>
-              <div className={styles.tableCard}>customer6</div>
-          </div>
-        </div>
-
-        <div className={styles.footer}>
-            <p>Made by FRH</p>
-            <p>Hams Gelban | FatemaElzahraa Elrotel | Rouaa Naim | © 2024 FRH, Inc. </p>
-        </div>
-
-
-  </div>
     );
 }
