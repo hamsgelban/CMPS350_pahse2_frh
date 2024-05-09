@@ -172,7 +172,7 @@ async function onPurchase(itemId){
         }
         else{
             alert(`Please login-in before purchasing an item.`)
-            window.location.href = `/public/html/login.html?id=${itemId}`
+            window.location.href = `/public/html/login.html`
             
         }
     }

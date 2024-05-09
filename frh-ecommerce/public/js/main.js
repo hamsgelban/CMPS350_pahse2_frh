@@ -25,10 +25,10 @@ let users =[]
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Loading categories from prisma DB
-        loadCategories()
+        await loadCategories()
 
         //loading users from prisma DB
-        loadUsers()
+        await loadUsers()
         
         showCategories(categories)
         updateLoginLink()
@@ -54,18 +54,36 @@ async function loadCategories() {
     showCategories(categories)
 }
 
-// Function to load users
 async function loadUsers() {
-    try{
-        const response = await fetch(`${apiURL}/customers`)
-        if (!response.ok) {
-            throw new Error("Failed to fetch: " + response.statusText);
+    try {
+        const customersURL = `${apiURL}/customers`;
+        const artistsURL = `${apiURL}/artists`;
+
+        // Execute both fetch requests in parallel
+        const [customersResponse, artistsResponse] = await Promise.all([
+            fetch(customersURL),
+            fetch(artistsURL)
+        ]);
+
+        // Check if both responses are ok
+        if (!customersResponse.ok) {
+            throw new Error(`Failed to fetch customers: ${customersResponse.statusText}`);
         }
-        users = await response.json()
-    }catch(error){
+        if (!artistsResponse.ok) {
+            throw new Error(`Failed to fetch artists: ${artistsResponse.statusText}`);
+        }
+
+        // Parse JSON responses
+        const customers = await customersResponse.json();
+        const artists = await artistsResponse.json();
+
+        // Combine customers and artists into one array
+        users = [...customers, ...artists];
+    } catch (error) {
         console.error("Error fetching users:", error);
     }
 }
+
 
 // ============================================================================================================================
 
@@ -91,7 +109,7 @@ function navigateToFilteredItems(categoryId){
 async function updateLoginLink() {
     try {
         // Fetch the users
-        users = JSON.parse(localStorage.getItem('users'));
+        // users = JSON.parse(localStorage.getItem('users'));
 
         const loggedInUser = users.findIndex(u => u.isLoggedIn === true)
 
@@ -117,19 +135,47 @@ async function updateLoginLink() {
     }
 }
 
+async function handleLogout() {
+    // Fetch both customer and artist data to find the logged-in user
+    const customersResponse = await fetch(`${apiURL}/customers`);
+    const customers = await customersResponse.json();
+    const loggedInCustomer = customers.find(u => u.isLoggedIn === true);
 
-function handleLogout(loggedInUser) {
-    if (loggedInUser==-1) {
-        alert(`The user does not exist.`)
-        return;
+    const artistsResponse = await fetch(`${apiURL}/artists`);
+    const artists = await artistsResponse.json();
+    const loggedInArtist = artists.find(u => u.isLoggedIn === true);
+
+    let userEndpoint;
+    let user;
+
+    // Determine if the logged-in user is a customer or an artist
+    if (loggedInCustomer) {
+        userEndpoint = `${apiURL}/customers/${loggedInCustomer.id}`;
+        user = loggedInCustomer;
+    } else if (loggedInArtist) {
+        userEndpoint = `${apiURL}/artists/${loggedInArtist.id}`;
+        user = loggedInArtist;
     } else {
-        users[loggedInUser].isLoggedIn = false
-        localStorage.setItem('users', JSON.stringify(users))
+        alert("No logged in user found.");
+        return;
+    }
 
-        alert("You have been successfully logged out.")
-        updateLoginLink()
+    // Set the user's loggedIn status to false and update via the correct endpoint
+    if (user) {
+        user.isLoggedIn = false; // Modify the user object
+        await fetch(userEndpoint, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(user)
+        });
+
+        alert("You have been successfully logged out.");
+        // Refresh the login link to reflect the logout
+        updateLoginLink();
     }
 }
+
+
 
 function handleLogin() {
     window.location.href = "/public/html/login.html"
@@ -156,9 +202,13 @@ async function profileCheck() {
     const response2 = await fetch(`${apiURL}/artists`);
     const artists = await response2.json();
 
+    console.log(customers, artists);
+
     // Find the logged-in user in both lists
     const loggedInCustomer = customers.find(u => u.isLoggedIn === true);
+    console.log(loggedInCustomer);
     const loggedInArtist = artists.find(u => u.isLoggedIn === true);
+    console.log(loggedInArtist);
 
     // Redirect based on the type of logged-in user
     if (loggedInCustomer) {

@@ -93,6 +93,7 @@ class EcommerceRepo {
             return prisma.artist.findUnique(
                 {
                     where: {id}
+                    // include:{itemsOnSale: true}
                 }
             )
         } catch (error) {
@@ -389,7 +390,6 @@ class EcommerceRepo {
 
 
     async deleteItem(id){
-
         try {
             return await prisma.item.delete({
                 where: {

@@ -44,37 +44,28 @@ async function updateLoginLink() {
     try {
 
         const response = await fetch(`${apiURL}/customers`)
-        let customers = await response.json()
-
-        const response2 = await fetch(`${apiURL}/artists`)
-        let artists = await response2.json()
-
-        let users = []
-        users.concat(customers)
-        users.concat(artists)
-
-        // Find the index of the logged-in user
-        const loggedInUser = users.find(u => u.isLoggedIn == true);
-
-        if(loggedInUser != null) {
-            // If a user is logged in, change the link to a logout option
-            loginLINK.innerHTML = `<a href="#" id="loggedIn" class="login">Logout</a>`;
-            
-            // Add a logout event listener
-            document.querySelector("#loggedIn").addEventListener('click', (e) => {
-                e.preventDefault();
-                handleLogout(loggedInUser);
-            });
+        if (!response.ok) {
+            throw new Error("Failed to fetch: " + response.statusText);
         }
-        else {
-            // If no user is logged in, provide a login link
-            loginLINK.innerHTML = `<a href="#" id="loggedOut" class="login">Login</a>`;
+        users = await response.json()
+
+        const loggedInUser = users.findIndex(u => u.isLoggedIn === true)
+
+        if(loggedInUser!=-1){
+            loginLINK.innerHTML = `<a href="#" id="loggedIn" class="login">Logout</a>`
             
-            // Add a login event listener
+            document.querySelector("#loggedIn").addEventListener('click', (e) => {
+                e.preventDefault()
+                handleLogout(loggedInUser)
+            })
+        }
+        else{
+            loginLINK.innerHTML = `<a href="#" id="loggedOut" class="login">Login</a>`
+            
             document.querySelector("#loggedOut").addEventListener('click', (e) => {
-                e.preventDefault();
-                handleLogin();
-            });
+                e.preventDefault()
+                handleLogin()
+            })
         }
     
     } catch (error) {
