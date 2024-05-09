@@ -1,6 +1,7 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import Admin from '@/app/pages/admin'
+import Top from '@/app/components/top'
 
 export default function Home() {
   return (
@@ -96,8 +97,18 @@ export default function Home() {
     <>
 
         <div className={styles.container}>
+              {/* <div className={styles.top}>
+                <header className={styles.headerTop}>
+                    <h1 className={styles.headerH1}>FRH</h1>
+                    <ul className={styles.headerUl}>
+                        <li><a href="#contact">Contact Us</a></li>
+                        <li id="login"></li>
+                    </ul>
+                </header>
+              </div> */}
+
               <div className={styles.top}>
-                <h1>Header + nav</h1>
+                <Top></Top>
               </div>
 
               <div className={styles.side}>
@@ -109,27 +120,44 @@ export default function Home() {
               </div>
 
               <div className={`${styles.statistics}`}>
-                <h1>View statistics</h1>
-                <div className={styles.statTable}>
-                    <div>table1</div>
-                    <div>table2</div>
-                    <div>table3</div>
-                    <div>table4</div>
-                    <div>table5</div>
-                    <div>table6</div>
+                <h1 className={styles.header}>View statistics</h1>
+                <div className={styles.cards}>
+                    <div className={styles.tableCard}>table1</div>
+                    <div className={styles.tableCard}>table2</div>
+                    <div className={styles.tableCard}>table3</div>
+                    <div className={styles.tableCard}>table4</div>
+                    <div className={styles.tableCard}>table5</div>
+                    <div className={styles.tableCard}>table6</div>
                 </div>
               </div>
 
               <div className={styles.artists}>
-                <h1>View artists</h1>
+                <h1 className={styles.header}>View artists</h1>
+                <div className={styles.cards}>
+                    <div className={styles.tableCard}>artist1</div>
+                    <div className={styles.tableCard}>artist2</div>
+                    <div className={styles.tableCard}>artist3</div>
+                    <div className={styles.tableCard}>artist4</div>
+                    <div className={styles.tableCard}>artist5</div>
+                    <div className={styles.tableCard}>artist6</div>
+                </div>
               </div>
 
               <div className={styles.customers}>
-                <h1>View customers</h1>
+                <h1 className={styles.header}>View customers</h1>
+                <div className={styles.cards}>
+                    <div className={styles.tableCard}>customer1</div>
+                    <div className={styles.tableCard}>customer2</div>
+                    <div className={styles.tableCard}>customer3</div>
+                    <div className={styles.tableCard}>customer4</div>
+                    <div className={styles.tableCard}>customer5</div>
+                    <div className={styles.tableCard}>customer6</div>
+                </div>
               </div>
 
               <div className={styles.footer}>
-                <h1>footer</h1>
+                  <p>Made by FRH</p>
+                  <p>Hams Gelban | FatemaElzahraa Elrotel | Rouaa Naim | © 2024 FRH, Inc. </p>
               </div>
 
 
