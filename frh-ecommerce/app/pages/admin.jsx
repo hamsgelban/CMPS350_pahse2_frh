@@ -3,13 +3,11 @@ import styles from "@/app/page.module.css";
 
 export default function Admin() {
     return (
-        <>
+        <div className={styles.all}>
             <head>
                 <meta charset="UTF-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <title>Profile</title>
-                <link rel="stylesheet" href="/public/styles/history_updated.css" />
-                <link href="https://fonts.cdnfonts.com/css/jonathan" rel="stylesheet" />
             </head>
             <body>
                 {/* Header */}
@@ -22,7 +20,7 @@ export default function Admin() {
                     <p>Dashboard</p>
                 </div>
 
-                <div className={styles.main}>
+                <div className={styles.mainAdmin}>
 
                     <section className={styles.userInfo}>
                         <img src="../images/Design/Untitled.png" alt="User Profile" />
@@ -53,6 +51,6 @@ export default function Admin() {
                     <p>Hams Gelban | FatemaElzahraa Elrotel | Rouaa Naim</p>
                 </footer>
             </body>
-        </>
+        </div>
     );
 }
