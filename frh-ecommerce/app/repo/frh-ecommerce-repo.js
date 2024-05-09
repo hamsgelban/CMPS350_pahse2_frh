@@ -641,6 +641,44 @@ class EcommerceRepo {
         }
     }
 
+    async top3Artists() {
+        try {
+            const topThreeArtists = await prisma.transaction.groupBy({
+                by: ["userId"],
+                where: {
+                    date: {
+                        gte: new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000)
+                    }
+                },
+                aggregate: {
+                    _sum: { quantity: true }
+                },
+                orderBy: {
+                    _sum: {
+                        quantity: "desc"
+                    }
+                },
+                take: 3
+            });
+    
+            // Extract artistIds from topThreeArtists
+            const artistIds = topThreeArtists.map(artist => artist.artistID);
+    
+            // Fetch top 3 artists from the database
+            const topArtists = await prisma.artist.findMany({
+                where: {
+                    id: { in: artistIds }
+                },
+                take: 3
+            });
+    
+            return topArtists;
+        } catch (error) {
+            return { error: error.message };
+        }
+    }
+    
+
 
     
 }
