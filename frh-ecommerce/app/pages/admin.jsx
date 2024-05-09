@@ -5,10 +5,12 @@ import Top from '@/app/components/top'
 import Card from '@/app/components/card'
 import Table from '@/app/components/table'
 import ecommerceRepo from '@/app/repo/frh-ecommerce-repo'
-
-
+import ArtistTable from '../components/artistTable';
+import CustomerTable from '../components/customerTable'
 
 export default async function Admin() {
+const artists = await ecommerceRepo.getArtists()
+const customers = await ecommerceRepo.getCustomers()
 const items = await ecommerceRepo.totalPUrchasesPerYear();
 console.log(items)
 
@@ -108,14 +110,7 @@ console.log(items)
 
             <div className={styles.customers}>
                 <h1 className={styles.header}>View customers</h1>
-                <div className={styles.cards}>
-                    <div className={styles.tableCard}>customer1</div>
-                    <div className={styles.tableCard}>customer2</div>
-                    <div className={styles.tableCard}>customer3</div>
-                    <div className={styles.tableCard}>customer4</div>
-                    <div className={styles.tableCard}>customer5</div>
-                    <div className={styles.tableCard}>customer6</div>
-                </div>
+                <div className={styles.tableCard}><CustomerTable customers={customers}/></div>
             </div>
 
             <div className={styles.footer}>
