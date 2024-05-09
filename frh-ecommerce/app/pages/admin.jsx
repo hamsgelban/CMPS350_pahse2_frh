@@ -1,6 +1,8 @@
 import React from 'react';
 import styles from "@/app/page.module.css";
 import Top from '@/app/components/top' 
+import Card from '@/app/components/card' 
+
 
 export default function Admin() {
     return (
@@ -64,6 +66,8 @@ export default function Admin() {
           </header>
         </div> */}
 
+        
+
         <div className={styles.top}>
           <Top></Top>
         </div>
@@ -79,7 +83,9 @@ export default function Admin() {
         <div className={`${styles.statistics}`}>
           <h1 className={styles.header}>View statistics</h1>
           <div className={styles.cards}>
-              <div className={styles.tableCard}>table1</div>
+              <div className={styles.tableCard}>
+                <Card></Card>
+              </div>
               <div className={styles.tableCard}>table2</div>
               <div className={styles.tableCard}>table3</div>
               <div className={styles.tableCard}>table4</div>
