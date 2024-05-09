@@ -2,6 +2,8 @@ import React from 'react';
 import styles from "@/app/page.module.css";
 import Top from '@/app/components/top' 
 import Card from '@/app/components/card' 
+import Table from '@/app/components/table' 
+
 
 
 export default function Admin() {
@@ -86,7 +88,7 @@ export default function Admin() {
               <div className={styles.tableCard}>
                 <Card></Card>
               </div>
-              <div className={styles.tableCard}>table2</div>
+              <div className={styles.tableCard}><Table></Table></div>
               <div className={styles.tableCard}>table3</div>
               <div className={styles.tableCard}>table4</div>
               <div className={styles.tableCard}>table5</div>
