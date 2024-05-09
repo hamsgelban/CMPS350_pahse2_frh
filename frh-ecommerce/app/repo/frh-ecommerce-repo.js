@@ -413,6 +413,7 @@ class EcommerceRepo {
             return { error: error.message }
         }
     }
+
     //for one id it has many transactions
     async getTransaction(id) {
         try {
@@ -421,6 +422,14 @@ class EcommerceRepo {
             )
         } catch (error) {
             return { error: error.message }
+        }
+    }
+
+    async getUserTransactions(userId){
+        try{
+            return prisma.transaction.findMany({where: {userId}})
+        }catch(error){
+            return {error: error.message}
         }
     }
 
@@ -506,10 +515,6 @@ class EcommerceRepo {
                     _sum: {quantity: true}
                 }
             })
-
-            // const sum_quantity = prisma.trans_costumer_grouped.aggregate({
-            //     _sum: {quantity: true}
-            // })
 
             return costumer_purchases_grouped;
             

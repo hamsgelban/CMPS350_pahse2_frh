@@ -147,30 +147,27 @@ function navigateToFilteredItems(categoryId){
     window.location.href = `/public/html/all_Items.html?id=${categoryId}`
 }
 
-function profileCheck() {
-    // Retrieve customer data from local storage and parse it
-    const users = JSON.parse(localStorage.getItem('users'));
+async function profileCheck() {
 
-    // Find index of logged-in user in the usersCustomer array
-    const loggedInUser = users.findIndex(u => u.isLoggedIn === true);
+    // Fetch customers and artists
+    const response1 = await fetch(`${apiURL}/customers`);
+    const customers = await response1.json();
+    
+    const response2 = await fetch(`${apiURL}/artists`);
+    const artists = await response2.json();
 
-    // Check if a logged-in user is found
-    if(loggedInUser!=-1){
-        const user = users[loggedInUser]
-        if(user.type=="customer"){
-            //Handle customer here
-            window.location.href = "/public/html/history.html"
-        }
-        else if(user.type=="seller"){
-            //Handle seller here
-            window.location.href = "/public/html/historySeller.html"
-        }
-        else{
-            alert("An error occured")
-        }
-    }
-    else{
-        alert("Login before proceeding.")
-        window.location.href ="/public/html/login.html"
+    // Find the logged-in user in both lists
+    const loggedInCustomer = customers.find(u => u.isLoggedIn === true);
+    const loggedInArtist = artists.find(u => u.isLoggedIn === true);
+
+    // Redirect based on the type of logged-in user
+    if (loggedInCustomer) {
+        window.location.href = "/public/html/history.html"; // Redirect for customers
+    } else if (loggedInArtist) {
+        window.location.href = "/public/html/historySeller.html"; // Redirect for artists
+    } else {
+        // If no user is logged in, prompt login and redirect to the login page
+        alert("Login before proceeding.");
+        window.location.href ="/public/html/login.html";
     }
 }

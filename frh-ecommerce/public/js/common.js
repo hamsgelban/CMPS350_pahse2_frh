@@ -1,4 +1,5 @@
 // Define variables for common DOM elements
+let apiURL = "http://localhost:3000/api"
 let loginLINK;
 let profileB;
 
@@ -36,13 +37,14 @@ async function loadElement(elementId, url) {
 // Function to update the login link based on the user's login status
 async function updateLoginLink() {
     try {
-        // Retrieve the list of users from localStorage and parse it
-        let users = JSON.parse(localStorage.getItem('users'));
+
+        const response = await fetch(`${apiURL}/customers`)
+        let users = await response.json()
 
         // Find the index of the logged-in user
-        const loggedInUser = users.findIndex(u => u.isLoggedIn == true);
+        const loggedInUser = users.find(u => u.isLoggedIn == true);
 
-        if(loggedInUser != -1) {
+        if(loggedInUser != null) {
             // If a user is logged in, change the link to a logout option
             loginLINK.innerHTML = `<a href="#" id="loggedIn" class="login">Logout</a>`;
             
@@ -69,14 +71,20 @@ async function updateLoginLink() {
 }
 
 // Function to handle user logout
-function handleLogout(loggedInUser) {
-    if (loggedInUser == -1) {
+async function handleLogout(loggedInUser) {
+    if (loggedInUser == null) {
         alert(`The user does not exist.`);
         return;
     } else {
-        // Set the user's loggedIn status to false and update localStorage
-        users[loggedInUser].isLoggedIn = false;
-        localStorage.setItem('users', JSON.stringify(users));
+        // Set the user's loggedIn status to false and update prisma
+        loggedInUser.isLoggedIn = false
+        await fetch(`${apiURL}/customers/${loggedInUser.id}`,
+                {
+                    method: 'PUT',
+                    headers: { 'Content-Type': "application/json", },
+                    body: JSON.stringify(loggedInUser)
+                });
+
 
         alert("You have been successfully logged out.");
         // Refresh the login link to reflect the logout
@@ -89,32 +97,27 @@ function handleLogin() {
     window.location.href = "/public/html/login.html";
 }
 
-// Function to check the user's profile type and redirect accordingly
-function profileCheck() {
-    // Retrieve and parse the user data from localStorage
-    const users = JSON.parse(localStorage.getItem('users'));
+async function profileCheck() {
+    // Fetch customers and artists using the already declared apiURL
+    const response1 = await fetch(`${apiURL}/customers`);
+    const customers = await response1.json();
+    
+    const response2 = await fetch(`${apiURL}/artists`);
+    const artists = await response2.json();
 
-    // Find the logged-in user
-    const loggedInUser = users.findIndex(u => u.isLoggedIn === true);
+    // Find the logged-in user in both lists
+    const loggedInCustomer = customers.find(u => u.isLoggedIn === true);
+    const loggedInArtist = artists.find(u => u.isLoggedIn === true);
 
-    // If a user is logged in, redirect based on their type
-    if(loggedInUser != -1) {
-        const user = users[loggedInUser];
-        if(user.type == "customer") {
-            // Redirect customer users
-            window.location.href = "/public/html/history.html";
-        }
-        else if(user.type == "seller") {
-            // Redirect seller users
-            window.location.href = "/public/html/historySeller.html";
-        }
-        else {
-            alert("An error occurred");
-        }
-    }
-    else {
+    // Redirect based on the type of logged-in user
+    if (loggedInCustomer) {
+        window.location.href = "/public/html/history.html"; // Redirect for customers
+    } else if (loggedInArtist) {
+        window.location.href = "/public/html/historySeller.html"; // Redirect for artists
+    } else {
         // If no user is logged in, prompt login and redirect to the login page
         alert("Login before proceeding.");
         window.location.href ="/public/html/login.html";
     }
 }
+
