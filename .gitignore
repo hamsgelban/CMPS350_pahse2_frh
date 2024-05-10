@@ -135,3 +135,5 @@ frh-ecommerce/.next/cache/webpack/client-development/0.pack.gz
 frh-ecommerce/.next/server/middleware-build-manifest.js
 frh-ecommerce/.next/server/pages-manifest.json
 frh-ecommerce/.next/trace
+*.gz
+*.old
