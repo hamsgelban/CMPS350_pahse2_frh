@@ -452,27 +452,6 @@ class EcommerceRepo {
         }
     }
     
-
-    // async addTransaction(customer, transaction) {
-    //     transaction.id = id
-    //     transaction.amount = parseInt(transaction.amount.toString());
-
-    //     try {
-    //         const account = this.getCustomerByUsername()
-    //         if (transaction.transType == 'Deposit')
-    //             account.balance += transaction.amount
-    //         else if (account.balance >= transaction.amount)
-    //             account.balance -= transaction.amount
-    //         else
-    //             return { error: "Insufficient Balance" }
-
-    //         this.updateAccount(id, account)
-    //         return prisma.transaction.create({ data: transaction })
-
-    //     } catch (error) {
-    //         return { error: error.message }
-    //     }
-    // }
     async addTransaction(customerId, transaction) {
             
             const customer = await this.getCustomerById(customerId)
@@ -543,89 +522,55 @@ class EcommerceRepo {
         }
     }
 
-    // total purchases done in each year per customer
-    // async totalPurchasesPerYear() {
+    
+    // async  totalPurchaseForYear(year) {
     //     try {
-    //         const purchasesPerYear = await prisma.transaction.groupBy({
-    //             by: [{ year: prisma.transaction.date }, "userId"],
-    //             aggregate: {
-    //             count: {count: true}
-    //             },
-    //             orderBy: [{ year: 'asc' }]
+    //         const transactionsForYear = await prisma.transaction.findMany({
+    //             where: {
+    //                 AND: [
+    //                     { date: { gte: new Date(Date.UTC(year, 0, 1)) } }, // Start of the year
+    //                     { date: { lt: new Date(Date.UTC(year + 1, 0, 1)) } } // Start of the next year
+    //                 ]
+    //             }
     //         });
     
-    //         return purchasesPerYear;
+    //         // Calculate total purchase
+    //         let totalPurchase = 0;
+    //         transactionsForYear.forEach(transaction => {
+    //             totalPurchase += transaction.totalPrice;
+    //         });
+    
+    //         return totalPurchase;
     //     } catch (error) {
     //         return { error: error.message };
     //     }
     // }
     
-    // async totalPUrchasesPerYear(){
-    //     try {
 
-    //         const costumer_year_grouped = prisma.transaction.groupBy({
-    //             by: ["userId", prisma.fn.datePart("year", "date")],
-    //             aggregate: {
-    //                 _count: {count: true}
-    //             },
-    //             orderBy: {
-    //                 year: "asc"
-    //             }
-    //         })
-
-    //         // const count_transactions = prisma.costumer_year_grouped.aggregate({
-    //         //     _count: {count: true},
-    //         //     orderBy: { year: "asc" }
-    //         // })
-
-    //         return costumer_year_grouped;
-            
-    //     } catch (error) {
-    //         return { error: error.message }
-    //     }
-    // }
-
-    // async  totalPurchasesPerYear() {
-    //     try {
-    //         const costumerYearGrouped = await prisma.transaction.groupBy({
-    //             by: ["userId", prisma.fn.datePart("year", "date")],
-    //             aggregate: {
-    //                 _count: { count: true }
-    //             },
-    //             orderBy: {
-    //                 year: "asc"
-    //             }
-    //         });
-    //         // Process the data to fit the structure expected by the component
-    //         const data = costumerYearGrouped.map(item => ({
-    //             userId: item.userId,
-    //             year: item.year,
-    //             totalPurchases: item._count.count
-    //         }));
-    //         return data;
-    //     } catch (error) {
-    //         return { error: error.message };
-    //     }
-    // }
-    
-    async  totalPurchaseForYear(year) {
+    async  totalPurchasePerUser() {
         try {
-            const transactionsForYear = await prisma.transaction.findMany({
-                where: {
-                    AND: [
-                        { date: { gte: new Date(Date.UTC(year, 0, 1)) } }, // Start of the year
-                        { date: { lt: new Date(Date.UTC(year + 1, 0, 1)) } } // Start of the next year
-                    ]
+            const usersWithTotalPurchase = await prisma.customer.findMany({
+                include: {
+                    transactions: {
+                        select: {
+                            quantity: true
+                        }
+                    }
                 }
             });
     
-            // Calculate total purchase
-            let totalPurchase = 0;
-            transactionsForYear.forEach(transaction => {
-                totalPurchase += transaction.totalPrice;
+            const result = usersWithTotalPurchase.map(user => {
+                const totalPurchase = user.transactions.reduce((total, transaction) => {
+                    return total + transaction.quantity;
+                }, 0);
+    
+                return {
+                    userId: user.id,
+                    totalPurchase: totalPurchase
+                };
             });
     
-            return totalPurchase;
+            return result;
         } catch (error) {
             return { error: error.message };
         }
@@ -679,32 +624,6 @@ class EcommerceRepo {
             return { error: error.message }
         }
     }
-
-    // Total Purchases for each category
-    // async totalPurchasesPerCategory(){
-    //     try {
-
-    //         const total_purchases_per_category = prisma.transaction.findMany({
-    //             include: {
-    //                 item: true
-    //             },
-    //             groupBy: {
-    //                 by: ["item.categoryId"]
-    //             },
-    //             aggregate :{
-    //                 _sum: {
-    //                     quantity: true
-    //                 }
-    //             }
-    //         })
-
-    //         return total_purchases_per_category;
-            
-    //     } catch (error) {
-    //         return { error: error.message }
-    //     }
-    // }
- 
 
     async  totalPurchasePerCategory() {
         try {

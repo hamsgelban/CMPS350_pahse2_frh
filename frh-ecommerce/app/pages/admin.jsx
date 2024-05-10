@@ -1,4 +1,3 @@
-'use client'
 import React from 'react';
 import styles from "@/app/page.module.css";
 import Top from '@/app/components/top'
@@ -7,9 +6,10 @@ import Table from '@/app/components/table'
 import ecommerceRepo from '@/app/repo/frh-ecommerce-repo'
 import ArtistTable from '../components/artistTable';
 import CustomerTable from '../components/customerTable'
-import TotalPurcahseTable from '../components/totalpurchase'
 import TotalCityTable from '../components/totalCity'
 import TotalCategoryTable from '../components/totalCategory'
+import TotalUserTable from '../components/totalUser'
+
 
 
 
@@ -19,6 +19,8 @@ const artists = await ecommerceRepo.getArtists()
 const customers = await ecommerceRepo.getCustomers()
 const cdata = await ecommerceRepo.totalPurchasesPerCity();
 const catdata = await ecommerceRepo.totalPurchasePerCategory();
+const utdata = await ecommerceRepo.totalPurchasePerUser();
+
 
 
 
@@ -101,7 +103,7 @@ const catdata = await ecommerceRepo.totalPurchasePerCategory();
                 <h1 className={styles.header}>View statistics</h1>
                 <div className={styles.cards}>
                     <div className={styles.tableCard}>
-                        <TotalPurcahseTable></TotalPurcahseTable>
+                        <TotalUserTable data={utdata}></TotalUserTable>
                     </div>
                     <div className={styles.tableCard}><TotalCityTable data={cdata}></TotalCityTable></div>
                     <div className={styles.tableCard}><TotalCategoryTable data={catdata}></TotalCategoryTable></div>
