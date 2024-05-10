@@ -4,10 +4,9 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import styles from "@/app/page.module.css";
-import MiniCard from '@/app/components/miniCardCategory'
+import MiniCard from '@/app/components/miniCardCategory';
 
-
-export default function mainCardGeneral({ data }) {
+export default function mainCardGeneral({ data, imageUrl }) {
     return (
         <Card className={styles.topCard}>
             <CardActionArea>
@@ -16,11 +15,10 @@ export default function mainCardGeneral({ data }) {
                         Top Three
                     </Typography>
                     {data.map((dataItem, index) => (
-                        <MiniCard key={index} data={dataItem} />
+                        <MiniCard key={index} data={dataItem} imageUrl={imageUrl} />
                     ))}
                 </CardContent>
             </CardActionArea>
         </Card>
     );
 }
-

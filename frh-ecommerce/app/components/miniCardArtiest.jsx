@@ -5,27 +5,26 @@ import { CardActionArea } from '@mui/material';
 import styles from "@/app/page.module.css";
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
-import winnerImag from '@/public/images/Design/winner.jpg'
 
-export default function miniCardCategory({data}) {
-  return (
-    <Card className={styles.miniCard}>
+export default function MiniCardCategory({ data, imageUrl }) {
+    return (
+        <Card className={styles.miniCard}>
             <CardActionArea>
-            <CardMedia
+                <CardMedia
                     component="img"
                     height="140"
-                    image={winnerImag}
-                    alt="Top Artiest cards"
+                    image={`https://i.pinimg.com/564x/91/10/ea/9110ea8ee4374256f01f6c913b3d488d.jpg`} // Use imageUrl directly
+                    alt="Top Artist cards"
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                    Name: {data.name}
+                        Name: {data.name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                    Username: {data.username}
+                        Username: {data.username}
                     </Typography>
                 </CardContent>
             </CardActionArea>
         </Card>
-  )
+    );
 }

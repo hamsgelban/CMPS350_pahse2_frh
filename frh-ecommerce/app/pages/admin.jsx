@@ -58,7 +58,7 @@ export default async function Admin() {
                     </div>
                     <div className={styles.tableCard}><TotalCityTable data={cdata}></TotalCityTable></div>
                     <div className={styles.tableCard}><TotalCategoryTable data={catdata}></TotalCategoryTable></div>
-                    <div className={styles.tableCard}> <MainCardCat data={topCategories}></MainCardCat></div>
+                    <div className={styles.tableCard}> <MainCardCat data={topCategories} imageUrl="https://i.pinimg.com/564x/17/cb/34/17cb349e9d9a83d9ecebb01dfcea7b93.jpg"></MainCardCat></div>
                     <div className={styles.tableCard}> <MainCardArt data={topArtists}></MainCardArt></div>
                     <div className={styles.tableCard}> <MainCardItem data={topItems}></MainCardItem></div>
 
