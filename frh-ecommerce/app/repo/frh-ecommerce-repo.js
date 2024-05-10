@@ -799,6 +799,17 @@ async  top3Categories() {
         }
     }
 
+    async updateAdmin(){
+        try{
+            return prisma.admin.update({
+                data: admin,
+                where: {id}
+        })
+        }catch(error){
+            return {error: error.message}
+        }
+    }
+
 }
 
 export default new EcommerceRepo()
