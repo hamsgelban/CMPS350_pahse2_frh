@@ -137,3 +137,4 @@ frh-ecommerce/.next/server/pages-manifest.json
 frh-ecommerce/.next/trace
 *.gz
 *.old
+frh-ecommerce/.next/cache/webpack/server-development/index.pack.gz.old
