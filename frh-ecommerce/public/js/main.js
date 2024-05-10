@@ -202,7 +202,7 @@ function handleLogout() {
         fetch(userEndpoint, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(user)
+            body: JSON.stringify(loggedInUser)
         }).then(response => {
             if (response.ok) {
                 alert("You have been successfully logged out.");
