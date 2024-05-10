@@ -446,7 +446,7 @@ class EcommerceRepo {
     }
     
     async addTransaction(customerId, transaction) {
-            
+            console.log("INSIDE ASS TRANSACTION");
             const customer = await this.getCustomerById(customerId)
             const item = await this.getItemById(transaction.itemId)
 
@@ -454,7 +454,8 @@ class EcommerceRepo {
             try {
             if (transaction.totalPrice <= customer.balance) {
                 customer.balance -= (transaction.totalPrice);
-                item.available_quantity--;
+                item.available_quantity-=transaction.quantity;
+                item.quantity_to_buy = 0
             }
             else {
                 return { error: "Insufficient Balance" };

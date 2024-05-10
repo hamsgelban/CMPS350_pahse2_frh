@@ -98,21 +98,6 @@ async function onPurchase(e) {
     const amountToBePaid = currentItem.quantity_to_buy * currentItem.price;
 
     if (loggedInUser.balance > amountToBePaid && currentItem.quantity_to_buy > 0 && currentItem.quantity_to_buy <= currentItem.available_quantity) {
-        loggedInUser.balance -= amountToBePaid;
-        currentItem.available_quantity -= currentItem.quantity_to_buy;
-
-
-        const itemUpdate = {
-            title: currentItem.title,
-            price: currentItem.price,
-            currency: currentItem.currency,
-            description: currentItem.description,
-            image_url: currentItem.image_url,
-            available_quantity: currentItem.available_quantity,
-            quantity_to_buy: 0 
-        };
-        console.log(itemUpdate);
-        console.log(loggedInUser);
         const transaction = {
             userId: loggedInUser.id,
             itemId: currentItem.id,
@@ -121,18 +106,6 @@ async function onPurchase(e) {
             location: location
         };
 
-        await fetch(`${apiURL}/items/${currentItem.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': "application/json" },
-            body: JSON.stringify(itemUpdate)
-        });
-        
-        await fetch(`${apiURL}/customers/${loggedInUser.id}`,
-                {
-                    method: 'PUT',
-                    headers: { 'Content-Type': "application/json", },
-                    body: JSON.stringify(loggedInUser)
-                });
 
         const transactionResponse = await fetch(`${apiURL}/customers/${loggedInUser.id}/transactions`, {
             method: 'POST',
@@ -140,11 +113,8 @@ async function onPurchase(e) {
             body: JSON.stringify(transaction)
         });
 
-        if(!customerResponse.ok){
-            console.log("Faled to update customer");
-        }
         if(!transactionResponse.ok){
-            console.log("Failed to post a trsnaction");
+            console.log("Failed to post a transaction");
         }
 
         alert(`Purchase successful\nNew balance: ${loggedInUser.balance}\nNew available quantity: ${currentItem.available_quantity}`);

@@ -21,7 +21,8 @@ export default function MiniCardItems({ data, url }) {
             Title: {data.title}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Description: {data.description}
+            Id: {data.id}
+            {/* Description: {data.description} */}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             Available Quantity: {data.available_quantity}
