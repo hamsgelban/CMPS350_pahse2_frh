@@ -20,13 +20,13 @@ export default function totalpurchase({data}) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {data.map((row, index) => (
+                    {/* {data.map((row, index) => (
                         <TableRow key={index}>
                             <TableCell>{row.userId}</TableCell>
                             <TableCell>{row.year}</TableCell>
                             <TableCell>{row.totalPurchases}</TableCell>
                         </TableRow>
-                    ))}
+                    ))} */}
                 </TableBody>
             </Table>
         </TableContainer>

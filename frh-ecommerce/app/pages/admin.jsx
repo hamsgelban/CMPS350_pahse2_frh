@@ -13,7 +13,6 @@ import TotalPurcahse from '../components/totalpurchase'
 export default async function Admin() {
 const artists = await ecommerceRepo.getArtists()
 const customers = await ecommerceRepo.getCustomers()
-const data = await ecommerceRepo.totalPurchasesPerYear()
 
 
     return (
@@ -95,7 +94,7 @@ const data = await ecommerceRepo.totalPurchasesPerYear()
                 <h1 className={styles.header}>View statistics</h1>
                 <div className={styles.cards}>
                     <div className={styles.tableCard}>
-                        <TotalPurcahse data={data}></TotalPurcahse>
+                        <TotalPurcahse></TotalPurcahse>
                     </div>
                     <div className={styles.tableCard}><Table></Table></div>
                     <div className={styles.tableCard}><Table></Table></div>
