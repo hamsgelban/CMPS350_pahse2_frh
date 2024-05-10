@@ -11,7 +11,7 @@ export default function TotalUser({ data: cdata }) {
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="caption table">
-                <caption>Total purchases per city</caption>
+                <caption>Total purchases per User</caption>
                 <TableHead>
                     <TableRow>
                         <TableCell>User Id</TableCell>
