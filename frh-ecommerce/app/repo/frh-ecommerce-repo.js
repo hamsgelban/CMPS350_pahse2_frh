@@ -210,8 +210,8 @@ class EcommerceRepo {
 
     async getCustomerByUsername(username){
         try {
-            return prisma.customer.findUnique({
-                where: { username }
+            return prisma.customer.findMany({
+                where: { username: username }
             });
         } catch (error) {
             return { error: error.message }
@@ -309,9 +309,8 @@ class EcommerceRepo {
         try {
             return await prisma.item.findMany({
                 where: {
-                price: price,
-                },
-                include: {Artist: true, Category: true}
+                price: parseInt(price),
+                }
             });
         } catch (error) {
             return { error: error.message }
@@ -332,12 +331,11 @@ class EcommerceRepo {
 
     }
 
-    async getItemByCategory(category){
+    async getItemByCategory(id){
 
         try {
             return await prisma.item.findMany({
-                where: {Category:category},
-                include: {Artist: true, Category: true}
+                where: {categoryId: parseInt(id)}
             });
         } catch (error) {
             return { error: error.message }
@@ -349,7 +347,7 @@ class EcommerceRepo {
 
         try {
             return await prisma.item.findMany({
-                where: {artistID: id}
+                where: {artistID: parseInt(id)}
             });
         } catch (error) {
             return { error: error.message }

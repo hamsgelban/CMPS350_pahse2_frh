@@ -2,23 +2,27 @@ import EcommerceRepo from "@/app/repo/frh-ecommerce-repo.js"
 
 // Return all customers or curomer by name or cutomer by username
 export async function GET(request) {
-    let customers = []
     const { searchParams } = new URL(request.url)
 
-    const name = searchParams.get('name')
-    const username = searchParams.get('username')
+    let filterType = [...searchParams.keys()][0]
+    let value = searchParams.get(filterType)
+    let response;
 
-    if (name) {
-        customers = await EcommerceRepo.getCustomerByName(name)
+    try{
+        switch(filterType){
+            case 'username' :
+                response = await EcommerceRepo.getCustomerByUsername(value)
+                break;
+            case 'name' : 
+                response = await EcommerceRepo.getCustomerByName(value)
+                break;
+            default:
+                response = await EcommerceRepo.getCustomers();
+        }
+        return Response.json(response, { status: 200 });
+    } catch (error) {
+        return Response.json(handleError(error), { status: 500 });
     }
-    else if (username) {
-        customers = await EcommerceRepo.getCustomerByUsername(name)
-    }
-    else {
-        customers = await EcommerceRepo.getCustomers()
-    }
-
-    return Response.json(customers, { status: 200 })
 }
 
 

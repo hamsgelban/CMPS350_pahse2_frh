@@ -12,9 +12,6 @@ export async function GET(request) {
     let response;
     try {
         switch (filterType) {
-            case 'id':
-                response = await ecommerceRepo.getItemById(value);
-                break;
             case 'name':
                 response = await ecommerceRepo.getItemByTitle(value);
                 break;
@@ -26,6 +23,9 @@ export async function GET(request) {
                     break;
             case 'description':
                         response = await ecommerceRepo.getItemByDescription(value);
+                        break;
+            case 'price':
+                        response = await ecommerceRepo.getItemByPrice(value);
                         break;
 
             // Add other cases for different filters if needed
