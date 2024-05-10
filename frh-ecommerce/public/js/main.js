@@ -162,7 +162,7 @@ function addAdminTab() {
     let statsTab = document.querySelector('a[href="/path-to-stats-page"]');
     if (!statsTab) {
         statsTab = document.createElement('li');
-        statsTab.innerHTML = `<a href="/path-to-stats-page">Stats</a>`;
+        statsTab.innerHTML = `<a href="http://localhost:3000/">Stats</a>`;
         navList.appendChild(statsTab);
     }
 }
