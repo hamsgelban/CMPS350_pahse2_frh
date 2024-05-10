@@ -548,8 +548,10 @@ class EcommerceRepo {
         try {
             const purchasesPerYear = await prisma.transaction.groupBy({
                 by: [{ year: prisma.transaction.date }, "userId"],
-                _count: { id: true },
-                orderBy: [{ year: 'asc' }, { userId: 'asc' }]
+                aggregate: {
+                count: {count: true}
+                },
+                orderBy: [{ year: 'asc' }]
             });
     
             return purchasesPerYear;
