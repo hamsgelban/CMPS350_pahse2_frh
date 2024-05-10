@@ -13,7 +13,7 @@ export default function miniCardCategory({data}) {
             <CardMedia
                     component="img"
                     height="140"
-                    image={data.image_url}
+                    image={`..${data.image_url}`}
                     alt="Top Artiest cards"
                 />
                 <CardContent>
