@@ -799,7 +799,7 @@ async  top3Categories() {
         }
     }
 
-    async updateAdmin(){
+    async updateAdmin(admin, id){
         try{
             return prisma.admin.update({
                 data: admin,

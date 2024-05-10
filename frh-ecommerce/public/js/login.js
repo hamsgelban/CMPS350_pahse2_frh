@@ -12,11 +12,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const customersURL = `${apiURL}/customers`;
         const artistsURL = `${apiURL}/artists`;
+        const adminURL = `${apiURL}/admin`;
 
         // Execute both fetch requests in parallel
-        const [customersResponse, artistsResponse] = await Promise.all([
+        const [customersResponse, artistsResponse, adminResponse] = await Promise.all([
             fetch(customersURL),
-            fetch(artistsURL)
+            fetch(artistsURL),
+            fetch(adminURL)
         ]);
 
         // Check if both responses are ok
@@ -26,13 +28,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!artistsResponse.ok) {
             throw new Error(`Failed to fetch artists: ${artistsResponse.statusText}`);
         }
+        if (!adminResponse.ok) {
+            throw new Error(`Failed to fetch artists: ${artistsResponse.statusText}`);
+        }
 
         // Parse JSON responses
         const customers = await customersResponse.json();
         const artists = await artistsResponse.json();
+        const admin = await adminResponse.json()
+        console.log(admin);
 
         // Combine customers and artists into one array
-        users = [...customers, ...artists];
+        users = [...customers, ...artists, admin];
     
     } catch (error) {
         console.error("Failed to load users:", error);
@@ -78,6 +85,10 @@ async function updateLoggedInUser(username){
     const artists = await artistsResponse.json();
     const loggedInArtist = artists.find(u => u.username === username);
 
+    const adminResponse = await fetch(`${apiURL}/admin`);
+    const admin = await adminResponse.json();
+    const loggedInAdmin = admin.isLoggedIn ? admin : null;
+
     let userEndpoint;
     let user;
 
@@ -88,7 +99,10 @@ async function updateLoggedInUser(username){
     } else if (loggedInArtist) {
         userEndpoint = `${apiURL}/artists/${loggedInArtist.id}`;
         user = loggedInArtist;
-    } 
+    } else if(loggedInAdmin){
+        userEndpoint = `${apiURL}/admin/${admin.id}`;
+        user = admin;
+    }
     if (user) {
         user.isLoggedIn = true; // Modify the user object
         await fetch(userEndpoint, {
