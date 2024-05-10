@@ -106,34 +106,45 @@ function navigateToFilteredItems(categoryId){
     window.location.href = `/public/html/all_Items.html?id=${categoryId}`
 }
 
-async function updateLoginLink() {
+aasync function updateLoginLink() {
     try {
-        // Fetch the users
-        // users = JSON.parse(localStorage.getItem('users'));
+        const loggedInUser = users.find(u => u.isLoggedIn === true);
 
-        const loggedInUser = users.findIndex(u => u.isLoggedIn === true)
-
-        if(loggedInUser!=-1){
-            loginLINK.innerHTML = `<a href="#" id="loggedIn" class="login">Logout</a>`
+        if (loggedInUser) {
+            loginLINK.innerHTML = `<a href="#" id="loggedIn" class="login">Logout</a>`;
             
             document.querySelector("#loggedIn").addEventListener('click', (e) => {
-                e.preventDefault()
-                handleLogout(loggedInUser)
-            })
-        }
-        else{
-            loginLINK.innerHTML = `<a href="#" id="loggedOut" class="login">Login</a>`
+                e.preventDefault();
+                handleLogout(loggedInUser);
+            });
+
+            // Check if the logged in user is an admin
+            if (loggedInUser.isAdmin) {
+                const navList = document.querySelector('.nav ul');
+                const statsTab = document.createElement('li');
+                statsTab.innerHTML = `<a href="/path-to-stats-page">Stats</a>`;
+                navList.appendChild(statsTab);
+            }
+        } else {
+            loginLINK.innerHTML = `<a href="#" id="loggedOut" class="login">Login</a>`;
             
             document.querySelector("#loggedOut").addEventListener('click', (e) => {
-                e.preventDefault()
-                handleLogin()
-            })
+                e.preventDefault();
+                handleLogin();
+            });
+
+            // Remove the Stats tab if it exists
+            const existingStatsTab = document.querySelector('.nav ul li a[href="/path-to-stats-page"]');
+            if (existingStatsTab) {
+                existingStatsTab.parentElement.remove();
+            }
         }
     
     } catch (error) {
         console.error("Failed to update login link:", error);
     }
 }
+
 
 async function handleLogout() {
     // Fetch both customer and artist data to find the logged-in user
