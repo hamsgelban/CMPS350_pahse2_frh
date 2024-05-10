@@ -7,7 +7,10 @@ import CustomerTable from '../components/customerTable'
 import TotalCityTable from '../components/totalCity'
 import TotalCategoryTable from '../components/totalCategory'
 import TotalUserTable from '../components/totalUser'
-import MainCard from '@/app/components/mainCradGeneral'
+import MainCardCat from '@/app/components/mainCradCat'
+import MainCardArt from '@/app/components/mainCradArt'
+import MainCardItem from '@/app/components/mainCradItem'
+
 
 
 
@@ -21,70 +24,17 @@ export default async function Admin() {
     const catdata = await ecommerceRepo.totalPurchasePerCategory()
     const utdata = await ecommerceRepo.totalPurchasePerUser()
     const topArtists = await ecommerceRepo.top3Artists()
+    const topCategories= await ecommerceRepo.top3Categories()
+    const topItems= await ecommerceRepo.getTop3Items()
+
+
 
 
 
 
     return (
-        // <div className={styles.all}>
-        //     <head>
-        //         <meta charset="UTF-8" />
-        //         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        //         <title>Profile</title>
-        //     </head>
-        //     <body>
-        //         {/* Header */}
-        //         <div id="header"></div>
-
-        //         {/* Navigation */}
-        //         <div id="nav"></div>
-
-        //         <div className={styles.pageName}>
-        //             <p>Dashboard</p>
-        //         </div>
-
-        //         <div className={styles.mainAdmin}>
-
-        //             <section className={styles.userInfo}>
-        //                 <img src="../images/Design/Untitled.png" alt="User Profile" />
-        //                 {/* Here add customer username */}
-        //                 <h2 id="user_username"></h2>
-        //                 <form action="" className={styles.customerInfo} id="customer_info">
-        //                     <label htmlFor="name">Name: </label>
-        //                     <input type="text" id="name" name="name" className={styles.centeredInput} readOnly />
-
-        //                     <label htmlFor="totalPur">Total Number of Purchases: </label>
-        //                     <input type="text" id="totalPur" name="totalPur" className={styles.centeredInput} readOnly />
-
-        //                     <label htmlFor="totalAmount">Total Amount Spent: </label>
-        //                     <input type="text" id="totalAmount" name="totalAmount" className={styles.centeredInput} readOnly />
-        //                 </form>
-        //             </section>
-
-        //             <section className={styles.history}>
-        //                 <h2 className={styles.historyHeader}>View History</h2>
-        //                 <section className={styles.itemCards} id="history_container">
-        //                     {/* Here load History Items */}
-        //                 </section>
-        //             </section>
-        //         </div>
-
-        //         <footer>
-        //             <p>Made by FRH</p>
-        //             <p>Hams Gelban | FatemaElzahraa Elrotel | Rouaa Naim</p>
-        //         </footer>
-        //     </body>
-        // </div>
         <div className={styles.container}>
-            {/* <div className={styles.top}>
-          <header className={styles.headerTop}>
-              <h1 className={styles.headerH1}>FRH</h1>
-              <ul className={styles.headerUl}>
-                  <li><a href="#contact">Contact Us</a></li>
-                  <li id="login"></li>
-              </ul>
-          </header>
-        </div> */}
+
 
 
 
@@ -108,11 +58,13 @@ export default async function Admin() {
                     </div>
                     <div className={styles.tableCard}><TotalCityTable data={cdata}></TotalCityTable></div>
                     <div className={styles.tableCard}><TotalCategoryTable data={catdata}></TotalCategoryTable></div>
-                    {topArtists.map(a => (
-                        <div className={styles.tableCard}>
-                            <MainCard></MainCard>
-                        </div>
-                    ))}
+                    <div className={styles.tableCard}> <MainCardCat data={topCategories}></MainCardCat></div>
+                    <div className={styles.tableCard}> <MainCardArt data={topArtists}></MainCardArt></div>
+                    <div className={styles.tableCard}> <MainCardItem data={topItems}></MainCardItem></div>
+
+
+                    
+
                 </div>
             </div>
 

@@ -590,17 +590,44 @@ class EcommerceRepo {
     
 
     // The most 3 products bought over the last 6 months
-    async top3Items(){
+    // async top3Items() {
+    //     try {
+    //         const top_three = await prisma.transaction.groupBy({
+    //             by: ["itemId"],
+    //             where: {
+    //                 date: {
+    //                     gte: new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000)
+    //                 }
+    //             },
+    //             aggregate: {
+    //                 _sum: { quantity: true }
+    //             },
+    //             orderBy: {
+    //                 _sum: {
+    //                     quantity: "desc"
+    //                 }
+    //             },
+    //             take: 3
+    //         });
+    
+    //         return top_three;
+    
+    //     } catch (error) {
+    //         return { error: error.message };
+    //     }
+    // }
+
+    async getTop3Items() {
         try {
-            const top_three = prisma.transaction.groupBy({
+            const topThreeItems = await prisma.transaction.groupBy({
                 by: ["itemId"],
                 where: {
                     date: {
                         gte: new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000)
                     }
                 },
-                aggregate: {
-                    _sum: {"quantity": true}
+                _sum: {
+                    quantity: true
                 },
                 orderBy: {
                     _sum: {
@@ -608,15 +635,29 @@ class EcommerceRepo {
                     }
                 },
                 take: 3
-
-            })
-
-            return top_three;
-
+            });
+    
+            // Extract item IDs from the result
+            const itemIds = topThreeItems.map(item => item.itemId);
+    
+            // Retrieve details of the top 3 items
+            const topItems = await prisma.item.findMany({
+                where: {
+                    id: {
+                        in: itemIds
+                    }
+                }
+            });
+    
+            return topItems;
         } catch (error) {
-            return { error: error.message }
+            console.error("Error retrieving top 3 items:", error);
+            return { error: error.message };
         }
     }
+    
+    
+    
 
     async  totalPurchasePerCategory() {
         try {
