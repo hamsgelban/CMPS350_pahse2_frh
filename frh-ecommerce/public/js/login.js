@@ -87,7 +87,7 @@ async function updateLoggedInUser(username){
 
     const adminResponse = await fetch(`${apiURL}/admin`);
     const admin = await adminResponse.json();
-    const loggedInAdmin = admin.isLoggedIn ? admin : null;
+    const loggedInAdmin = admin.username==username ? admin : null;
 
     let userEndpoint;
     let user;
@@ -102,6 +102,8 @@ async function updateLoggedInUser(username){
     } else if(loggedInAdmin){
         userEndpoint = `${apiURL}/admin/${admin.id}`;
         user = admin;
+        console.log(userEndpoint);
+        console.log("IS ADMIN");
     }
     if (user) {
         user.isLoggedIn = true; // Modify the user object
