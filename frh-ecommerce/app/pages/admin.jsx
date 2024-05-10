@@ -15,11 +15,12 @@ import TotalUserTable from '../components/totalUser'
 
 
 export default async function Admin() {
-const artists = await ecommerceRepo.getArtists()
-const customers = await ecommerceRepo.getCustomers()
-const cdata = await ecommerceRepo.totalPurchasesPerCity();
-const catdata = await ecommerceRepo.totalPurchasePerCategory();
-const utdata = await ecommerceRepo.totalPurchasePerUser();
+    const artists = await ecommerceRepo.getArtists()
+    const customers = await ecommerceRepo.getCustomers()
+    const cdata = await ecommerceRepo.totalPurchasesPerCity()
+    const catdata = await ecommerceRepo.totalPurchasePerCategory()
+    const utdata = await ecommerceRepo.totalPurchasePerUser()
+    const topArtists = await ecommerceRepo.top3Artists()
 
 
 
@@ -107,9 +108,11 @@ const utdata = await ecommerceRepo.totalPurchasePerUser();
                     </div>
                     <div className={styles.tableCard}><TotalCityTable data={cdata}></TotalCityTable></div>
                     <div className={styles.tableCard}><TotalCategoryTable data={catdata}></TotalCategoryTable></div>
-                    <div className={styles.tableCard}><Card></Card></div>
-                    <div className={styles.tableCard}><Card></Card></div>
-                    <div className={styles.tableCard}><Card></Card></div>
+                    {topArtists.map(a => (
+                        <div className={styles.tableCard}>
+                            <Card artist={a}></Card>
+                        </div>
+                    ))}
                 </div>
             </div>
 

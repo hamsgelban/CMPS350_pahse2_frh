@@ -7,7 +7,7 @@ import { CardActionArea } from '@mui/material';
 import styles from "@/app/page.module.css";
 
 
-export default function card() {
+export default function card({artist}) {
     return (
         <Card sx={{ maxWidth: 345 }} className={styles.topCard}>
             <CardActionArea>
@@ -19,10 +19,10 @@ export default function card() {
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                        Test Body
+                        Name: {artist.name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        Test second Body
+                        Balance: {artist.balance}
                     </Typography>
                 </CardContent>
             </CardActionArea>

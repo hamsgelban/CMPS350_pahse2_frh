@@ -666,47 +666,94 @@ class EcommerceRepo {
     
     
 
-    async top3Artists() {
-        try {
-            const topThreeArtists = await prisma.transaction.groupBy({
-                by: ["userId"],
-                where: {
-                    date: {
-                        gte: new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000)
-                    }
-                },
-                aggregate: {
-                    _sum: { quantity: true }
-                },
-                orderBy: {
-                    _sum: {
-                        quantity: "desc"
-                    }
-                },
-                take: 3
-            });
+//     async top3Artists() {
+//         try {
+//             const topThreeArtists = await prisma.transaction.groupBy({
+//                 by: ["userId"],
+//                 where: {
+//                     date: {
+//                         gte: new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000)
+//                     }
+//                 },
+//                 aggregate: {
+//                     _sum: { quantity: true }
+//                 },
+//                 orderBy: {
+//                     _sum: {
+//                         quantity: "desc"
+//                     }
+//                 },
+//                 take: 3
+//             });
     
-            // Extract artistIds from topThreeArtists
-            const artistIds = topThreeArtists.map(artist => artist.artistID);
+//             // Extract artistIds from topThreeArtists
+//             const artistIds = topThreeArtists.map(artist => artist.artistID);
     
-            // Fetch top 3 artists from the database
-            const topArtists = await prisma.artist.findMany({
-                where: {
-                    id: { in: artistIds }
-                },
-                take: 3
-            });
+//             // Fetch top 3 artists from the database
+//             const topArtists = await prisma.artist.findMany({
+//                 where: {
+//                     id: { in: artistIds }
+//                 },
+//                 take: 3
+//             });
     
-            return topArtists;
-        } catch (error) {
-            return { error: error.message };
-        }
+//             return topArtists;
+//         } catch (error) {
+//             return { error: error.message };
+//         }
+//     }
+    
+
+
+    
+// }
+
+async top3Artists() {
+    try {
+        // Ensure the correct date calculation for the last six months
+        const sixMonthsAgo = new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000);
+        console.log(`Querying transactions from: ${sixMonthsAgo}`);
+
+        const topThreeArtists = await prisma.transaction.groupBy({
+            by: ["userId"],
+            where: {
+                date: {
+                    gte: new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000)
+                }
+            },
+            _sum: {
+                quantity: true
+            },
+            orderBy: {
+                _sum: {
+                    quantity: "desc"
+                }
+            },
+            take: 3
+        });            
+
+        console.log(`Top three artist transaction records: ${JSON.stringify(topThreeArtists)}`);
+
+        // Assuming that the artist ID field is correctly named 'userId' in the grouped result
+        const artistIds = topThreeArtists.map(artist => artist.userId);
+
+        console.log(`Artist IDs: ${artistIds}`);
+
+        const topArtists = await prisma.artist.findMany({
+            where: {
+                id: { in: artistIds }
+            },
+            take: 3
+        });
+
+        // console.log(`Top artists found: ${JSON.stringify(topArtists)}`);
+        return topArtists;
+        
+    } catch (error) {
+        console.error("Error in top3Artists:", error);
+        return { error: error.message };
     }
-    
-
-
-    
+}    
 }
-
 
 export default new EcommerceRepo()
