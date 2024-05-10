@@ -7,12 +7,14 @@ import Table from '@/app/components/table'
 import ecommerceRepo from '@/app/repo/frh-ecommerce-repo'
 import ArtistTable from '../components/artistTable';
 import CustomerTable from '../components/customerTable'
+import TotalPurcahse from '../components/totalpurchase'
+
 
 export default async function Admin() {
 const artists = await ecommerceRepo.getArtists()
 const customers = await ecommerceRepo.getCustomers()
-const items = await ecommerceRepo.totalPUrchasesPerYear();
-console.log(items)
+const data = await ecommerceRepo.totalPurchasesPerYear()
+
 
     return (
         // <div className={styles.all}>
@@ -93,7 +95,7 @@ console.log(items)
                 <h1 className={styles.header}>View statistics</h1>
                 <div className={styles.cards}>
                     <div className={styles.tableCard}>
-                        <Table></Table>
+                        <TotalPurcahse data={data}></TotalPurcahse>
                     </div>
                     <div className={styles.tableCard}><Table></Table></div>
                     <div className={styles.tableCard}><Table></Table></div>

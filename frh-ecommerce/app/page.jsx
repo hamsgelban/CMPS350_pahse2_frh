@@ -2,6 +2,9 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import Admin from '@/app/pages/admin'
 import Top from '@/app/components/top'
+import ecommerceRepo from '@/app/repo/frh-ecommerce-repo'
+
+
 
 export default function Home() {
   return (

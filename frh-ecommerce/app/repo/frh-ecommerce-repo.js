@@ -544,30 +544,77 @@ class EcommerceRepo {
     }
 
     // total purchases done in each year per customer
-    async totalPUrchasesPerYear(){
-        try {
+    // async totalPUrchasesPerYear(){
+    //     try {
 
-            const costumer_year_grouped = prisma.transaction.groupBy({
+    //         const costumer_year_grouped = prisma.transaction.groupBy({
+    //             by: ["userId", prisma.fn.datePart("year", "date")],
+    //             aggregate: {
+    //                 _count: {count: true}
+    //             },
+    //             orderBy: {
+    //                 year: "asc"
+    //             }
+    //         })
+
+    //         // const count_transactions = prisma.costumer_year_grouped.aggregate({
+    //         //     _count: {count: true},
+    //         //     orderBy: { year: "asc" }
+    //         // })
+
+    //         return costumer_year_grouped;
+            
+    //     } catch (error) {
+    //         return { error: error.message }
+    //     }
+    // }
+
+    async  totalPurchasesPerYear() {
+        try {
+            const costumerYearGrouped = await prisma.transaction.groupBy({
                 by: ["userId", prisma.fn.datePart("year", "date")],
                 aggregate: {
-                    _count: {count: true}
+                    _count: { count: true }
                 },
                 orderBy: {
                     year: "asc"
                 }
-            })
-
-            // const count_transactions = prisma.costumer_year_grouped.aggregate({
-            //     _count: {count: true},
-            //     orderBy: { year: "asc" }
-            // })
-
-            return costumer_year_grouped;
-            
+            });
+            // Process the data to fit the structure expected by the component
+            const data = costumerYearGrouped.map(item => ({
+                userId: item.userId,
+                year: item.year,
+                totalPurchases: item._count.count
+            }));
+            return data;
         } catch (error) {
-            return { error: error.message }
+            return { error: error.message };
         }
     }
+    
+
+    // async  handleTotalPurchasesPerYear() {
+    //     try {
+    //         // Assuming totalPurchasesPerYear is a method defined on some object, let's call it obj
+    //         const result = await obj.totalPurchasesPerYear();
+    
+    //         // Check if the result contains an error
+    //         if (result.error) {
+    //             console.error("An error occurred:", result.error);
+    //             // Handle error case
+    //             return;
+    //         }
+    
+    //         // Result should contain the grouped data
+    //         console.log("Total purchases per year:", result);
+    //         // Now you can process and use the grouped data as needed
+    //         // For example, iterate over the result and display or manipulate the data
+    
+    //     } catch (error) {
+    //         console.error("An unexpected error occurred:", error);
+    //         // Handle unexpected errors
+    //     }
+    // }
 
     // count number of purchases done in each location
     async totalPUrchasesPerCity(){
