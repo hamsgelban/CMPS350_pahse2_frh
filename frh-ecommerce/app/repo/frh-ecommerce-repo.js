@@ -345,16 +345,11 @@ class EcommerceRepo {
 
     }
 
-    async getItemByArtist(name){
+    async getItemByArtist(id){
 
         try {
-            const artist = prisma.artist.findFirst(
-                {where: {name}
-                },
-            );
             return await prisma.item.findMany({
-                where: {Artist:artist},
-                include: {Artist: true, Category: true}
+                where: {artistID: id}
             });
         } catch (error) {
             return { error: error.message }
