@@ -345,16 +345,11 @@ class EcommerceRepo {
 
     }
 
-    async getItemByArtist(name){
+    async getItemByArtist(id){
 
         try {
-            const artist = prisma.artist.findFirst(
-                {where: {name}
-                },
-            );
             return await prisma.item.findMany({
-                where: {Artist:artist},
-                include: {Artist: true, Category: true}
+                where: {artistID: id}
             });
         } catch (error) {
             return { error: error.message }
@@ -753,7 +748,47 @@ async top3Artists() {
         console.error("Error in top3Artists:", error);
         return { error: error.message };
     }
-}    
+} 
+async  top3Categories() {
+    try {
+        const categoriesWithTotalPurchase = await prisma.category.findMany({
+            include: {
+                items: {
+                    select: {
+                        Transaction: {
+                            select: {
+                                quantity: true
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        const categoriesWithTotalPurchaseSorted = categoriesWithTotalPurchase.map(category => {
+            const totalPurchase = category.items.reduce((total, item) => {
+                if (item.Transaction) {
+                    total += item.Transaction.reduce((sum, transaction) => {
+                        return sum + transaction.quantity;
+                    }, 0);
+                }
+                return total;
+            }, 0);
+
+            return {
+                category: category.name,
+                totalPurchase: totalPurchase
+            };
+        }).sort((a, b) => b.totalPurchase - a.totalPurchase);
+
+        const topThree = categoriesWithTotalPurchaseSorted.slice(0, 3);
+
+        return topThree;
+    } catch (error) {
+        return { error: error.message };
+    }
+}
+
 }
 
 export default new EcommerceRepo()
