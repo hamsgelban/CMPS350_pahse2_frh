@@ -10,8 +10,8 @@ import TotalUserTable from '../components/totalUser'
 import MainCardCat from '@/app/components/mainCradCat'
 import MainCardArt from '@/app/components/mainCradArt'
 import MainCardItem from '@/app/components/mainCradItem'
-
-
+import Link from 'next/link';
+import Nav from '@/app/components/nav'
 
 
 
@@ -40,17 +40,18 @@ export default async function Admin() {
 
             <div className={styles.top}>
                 <Top></Top>
+                <Nav></Nav>
             </div>
 
             <div className={styles.side}>
                 <div className={styles.links}>
-                    <a href="" className={styles.a}> View Statistics</a>
-                    <a href="" className={styles.a}> View Artists</a>
-                    <a href="" className={styles.a}> View Customers</a>
+                <Link href="#statisticsSection" className={styles.a}> View Statistics</Link>
+                    <Link href="#artistsSection" className={styles.a}> View Artists</Link>
+                    <Link href="#customersSection" className={styles.a}>View Customers</Link>
                 </div>
             </div>
 
-            <div className={`${styles.statistics}`}>
+            <div className={`${styles.statistics}`} id='statisticsSection'>
                 <h1 className={styles.header}>View statistics</h1>
                 <div className={styles.cards}>
                     <div className={styles.tableCard}>
@@ -68,12 +69,12 @@ export default async function Admin() {
                 </div>
             </div>
 
-            <div className={styles.artists}>
+            <div className={styles.artists} id='artistsSection'>
                 <h1 className={styles.header}>View artists</h1>
                 <div className={styles.tableCard}><ArtistTable artists={artists}/></div>
             </div>
 
-            <div className={styles.customers}>
+            <div className={styles.customers} id="customersSection">
                 <h1 className={styles.header}>View customers</h1>
                 <div className={styles.tableCard}><CustomerTable customers={customers}/></div>
             </div>
