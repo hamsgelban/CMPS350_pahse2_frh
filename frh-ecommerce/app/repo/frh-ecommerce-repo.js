@@ -544,6 +544,20 @@ class EcommerceRepo {
     }
 
     // total purchases done in each year per customer
+    async totalPurchasesPerYear() {
+        try {
+            const purchasesPerYear = await prisma.transaction.groupBy({
+                by: [{ year: prisma.transaction.date }, "userId"],
+                _count: { id: true },
+                orderBy: [{ year: 'asc' }, { userId: 'asc' }]
+            });
+    
+            return purchasesPerYear;
+        } catch (error) {
+            return { error: error.message };
+        }
+    }
+    
     // async totalPUrchasesPerYear(){
     //     try {
 
@@ -569,28 +583,28 @@ class EcommerceRepo {
     //     }
     // }
 
-    async  totalPurchasesPerYear() {
-        try {
-            const costumerYearGrouped = await prisma.transaction.groupBy({
-                by: ["userId", prisma.fn.datePart("year", "date")],
-                aggregate: {
-                    _count: { count: true }
-                },
-                orderBy: {
-                    year: "asc"
-                }
-            });
-            // Process the data to fit the structure expected by the component
-            const data = costumerYearGrouped.map(item => ({
-                userId: item.userId,
-                year: item.year,
-                totalPurchases: item._count.count
-            }));
-            return data;
-        } catch (error) {
-            return { error: error.message };
-        }
-    }
+    // async  totalPurchasesPerYear() {
+    //     try {
+    //         const costumerYearGrouped = await prisma.transaction.groupBy({
+    //             by: ["userId", prisma.fn.datePart("year", "date")],
+    //             aggregate: {
+    //                 _count: { count: true }
+    //             },
+    //             orderBy: {
+    //                 year: "asc"
+    //             }
+    //         });
+    //         // Process the data to fit the structure expected by the component
+    //         const data = costumerYearGrouped.map(item => ({
+    //             userId: item.userId,
+    //             year: item.year,
+    //             totalPurchases: item._count.count
+    //         }));
+    //         return data;
+    //     } catch (error) {
+    //         return { error: error.message };
+    //     }
+    // }
     
 
     // async  handleTotalPurchasesPerYear() {
