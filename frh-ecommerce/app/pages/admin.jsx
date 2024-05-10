@@ -7,8 +7,10 @@ import Table from '@/app/components/table'
 import ecommerceRepo from '@/app/repo/frh-ecommerce-repo'
 import ArtistTable from '../components/artistTable';
 import CustomerTable from '../components/customerTable'
-import TotalPurcahse from '../components/totalpurchase'
-import TotalCity from '../components/totalCity'
+import TotalPurcahseTable from '../components/totalpurchase'
+import TotalCityTable from '../components/totalCity'
+import TotalCategoryTable from '../components/totalCategory'
+
 
 
 
@@ -16,6 +18,8 @@ export default async function Admin() {
 const artists = await ecommerceRepo.getArtists()
 const customers = await ecommerceRepo.getCustomers()
 const cdata = await ecommerceRepo.totalPurchasesPerCity();
+const catdata = await ecommerceRepo.totalPurchasePerCategory();
+
 
 
     return (
@@ -97,10 +101,10 @@ const cdata = await ecommerceRepo.totalPurchasesPerCity();
                 <h1 className={styles.header}>View statistics</h1>
                 <div className={styles.cards}>
                     <div className={styles.tableCard}>
-                        <TotalPurcahse></TotalPurcahse>
+                        <TotalPurcahseTable></TotalPurcahseTable>
                     </div>
-                    <div className={styles.tableCard}><TotalCity data={cdata}></TotalCity></div>
-                    <div className={styles.tableCard}><Table></Table></div>
+                    <div className={styles.tableCard}><TotalCityTable data={cdata}></TotalCityTable></div>
+                    <div className={styles.tableCard}><TotalCategoryTable data={catdata}></TotalCategoryTable></div>
                     <div className={styles.tableCard}><Card></Card></div>
                     <div className={styles.tableCard}><Card></Card></div>
                     <div className={styles.tableCard}><Card></Card></div>

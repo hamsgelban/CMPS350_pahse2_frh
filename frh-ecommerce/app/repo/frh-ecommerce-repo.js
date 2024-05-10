@@ -681,29 +681,71 @@ class EcommerceRepo {
     }
 
     // Total Purchases for each category
-    async totalPurchasesPerCategory(){
-        try {
+    // async totalPurchasesPerCategory(){
+    //     try {
 
-            const total_purchases_per_category = prisma.transaction.findMany({
+    //         const total_purchases_per_category = prisma.transaction.findMany({
+    //             include: {
+    //                 item: true
+    //             },
+    //             groupBy: {
+    //                 by: ["item.categoryId"]
+    //             },
+    //             aggregate :{
+    //                 _sum: {
+    //                     quantity: true
+    //                 }
+    //             }
+    //         })
+
+    //         return total_purchases_per_category;
+            
+    //     } catch (error) {
+    //         return { error: error.message }
+    //     }
+    // }
+ 
+
+    async  totalPurchasePerCategory() {
+        try {
+            const categoriesWithTotalPurchase = await prisma.category.findMany({
                 include: {
-                    item: true
-                },
-                groupBy: {
-                    by: ["item.categoryId"]
-                },
-                aggregate :{
-                    _sum: {
-                        quantity: true
+                    items: {
+                        select: {
+                            Transaction: {
+                                select: {
+                                    quantity: true
+                                }
+                            }
+                        }
                     }
                 }
-            })
-
-            return total_purchases_per_category;
-            
+            });
+    
+            const result = categoriesWithTotalPurchase.map(category => {
+                const totalPurchase = category.items.reduce((total, item) => {
+                    if (item.Transaction) {
+                        total += item.Transaction.reduce((sum, transaction) => {
+                            return sum + transaction.quantity;
+                        }, 0);
+                    }
+                    return total;
+                }, 0);
+    
+                return {
+                    category: category.name,
+                    totalPurchase: totalPurchase
+                };
+            });
+    
+            return result;
         } catch (error) {
-            return { error: error.message }
+            return { error: error.message };
         }
     }
+    
+    
+    
 
     async top3Artists() {
         try {
