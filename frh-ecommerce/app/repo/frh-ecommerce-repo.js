@@ -544,21 +544,21 @@ class EcommerceRepo {
     }
 
     // total purchases done in each year per customer
-    async totalPurchasesPerYear() {
-        try {
-            const purchasesPerYear = await prisma.transaction.groupBy({
-                by: [{ year: prisma.transaction.date }, "userId"],
-                aggregate: {
-                count: {count: true}
-                },
-                orderBy: [{ year: 'asc' }]
-            });
+    // async totalPurchasesPerYear() {
+    //     try {
+    //         const purchasesPerYear = await prisma.transaction.groupBy({
+    //             by: [{ year: prisma.transaction.date }, "userId"],
+    //             aggregate: {
+    //             count: {count: true}
+    //             },
+    //             orderBy: [{ year: 'asc' }]
+    //         });
     
-            return purchasesPerYear;
-        } catch (error) {
-            return { error: error.message };
-        }
-    }
+    //         return purchasesPerYear;
+    //     } catch (error) {
+    //         return { error: error.message };
+    //     }
+    // }
     
     // async totalPUrchasesPerYear(){
     //     try {
@@ -608,47 +608,48 @@ class EcommerceRepo {
     //     }
     // }
     
-
-    // async  handleTotalPurchasesPerYear() {
-    //     try {
-    //         // Assuming totalPurchasesPerYear is a method defined on some object, let's call it obj
-    //         const result = await obj.totalPurchasesPerYear();
-    
-    //         // Check if the result contains an error
-    //         if (result.error) {
-    //             console.error("An error occurred:", result.error);
-    //             // Handle error case
-    //             return;
-    //         }
-    
-    //         // Result should contain the grouped data
-    //         console.log("Total purchases per year:", result);
-    //         // Now you can process and use the grouped data as needed
-    //         // For example, iterate over the result and display or manipulate the data
-    
-    //     } catch (error) {
-    //         console.error("An unexpected error occurred:", error);
-    //         // Handle unexpected errors
-    //     }
-    // }
-
-    // count number of purchases done in each location
-    async totalPUrchasesPerCity(){
+    async  totalPurchaseForYear(year) {
         try {
-
-            const location_purchases = prisma.transaction.groupBy({
-                by: ["location"],
-                aggregate: {
-                    _count: {count: true}
+            const transactionsForYear = await prisma.transaction.findMany({
+                where: {
+                    AND: [
+                        { date: { gte: new Date(Date.UTC(year, 0, 1)) } }, // Start of the year
+                        { date: { lt: new Date(Date.UTC(year + 1, 0, 1)) } } // Start of the next year
+                    ]
                 }
-            })
-
-            return location_purchases;
-            
+            });
+    
+            // Calculate total purchase
+            let totalPurchase = 0;
+            transactionsForYear.forEach(transaction => {
+                totalPurchase += transaction.totalPrice;
+            });
+    
+            return totalPurchase;
         } catch (error) {
-            return { error: error.message }
+            return { error: error.message };
         }
     }
+    
+    
+    
+    
+    
+
+    // count number of purchases done in each location
+    async  totalPurchasesPerCity() {
+        try {
+            const locationPurchases = await prisma.transaction.groupBy({
+                by: ['location'],
+                _count: true
+            });
+    
+            return locationPurchases;
+        } catch (error) {
+            return { error: error.message };
+        }
+    }
+    
 
     // The most 3 products bought over the last 6 months
     async top3Items(){

@@ -8,11 +8,14 @@ import ecommerceRepo from '@/app/repo/frh-ecommerce-repo'
 import ArtistTable from '../components/artistTable';
 import CustomerTable from '../components/customerTable'
 import TotalPurcahse from '../components/totalpurchase'
+import TotalCity from '../components/totalCity'
+
 
 
 export default async function Admin() {
 const artists = await ecommerceRepo.getArtists()
 const customers = await ecommerceRepo.getCustomers()
+const cdata = await ecommerceRepo.totalPurchasesPerCity();
 
 
     return (
@@ -96,7 +99,7 @@ const customers = await ecommerceRepo.getCustomers()
                     <div className={styles.tableCard}>
                         <TotalPurcahse></TotalPurcahse>
                     </div>
-                    <div className={styles.tableCard}><Table></Table></div>
+                    <div className={styles.tableCard}><TotalCity data={cdata}></TotalCity></div>
                     <div className={styles.tableCard}><Table></Table></div>
                     <div className={styles.tableCard}><Card></Card></div>
                     <div className={styles.tableCard}><Card></Card></div>
