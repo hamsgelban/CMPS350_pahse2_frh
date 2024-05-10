@@ -106,7 +106,7 @@ function navigateToFilteredItems(categoryId){
     window.location.href = `/public/html/all_Items.html?id=${categoryId}`
 }
 
-aasync function updateLoginLink() {
+async function updateLoginLink() {
     try {
         const loggedInUser = users.find(u => u.isLoggedIn === true);
 
@@ -117,9 +117,14 @@ aasync function updateLoginLink() {
                 e.preventDefault();
                 handleLogout(loggedInUser);
             });
+            
+            const response = await fetch(`${apiURL}/admin`);
+            const admin = await response.json();
+            const loggedInAdmin = admin.find(u => u.isLoggedIn === true);
+            console.log(loggedInAdmin);
 
             // Check if the logged in user is an admin
-            if (loggedInUser.isAdmin) {
+            if (loggedInAdmin) {
                 const navList = document.querySelector('.nav ul');
                 const statsTab = document.createElement('li');
                 statsTab.innerHTML = `<a href="/path-to-stats-page">Stats</a>`;
@@ -212,8 +217,6 @@ async function profileCheck() {
     
     const response2 = await fetch(`${apiURL}/artists`);
     const artists = await response2.json();
-
-    console.log(customers, artists);
 
     // Find the logged-in user in both lists
     const loggedInCustomer = customers.find(u => u.isLoggedIn === true);

@@ -789,6 +789,16 @@ async  top3Categories() {
     }
 }
 
+    //Admin
+
+    async getAdmin(){
+        try {
+            return prisma.admin.findFirst();
+        } catch (error) {
+            return { error: error.message }
+        }
+    }
+
 }
 
 export default new EcommerceRepo()
