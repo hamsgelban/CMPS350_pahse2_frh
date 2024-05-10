@@ -5,7 +5,7 @@ import Link from 'next/link'
 import EcommerceRepo from '@/app/repo/frh-ecommerce-repo.js'
 
 export default function top() {
-  const urlpage = "http://localhost:5500/"
+  const urlpage = "http://127.0.0.1:5500/"
 
   async function handlelogOut(e) {
     e.preventDefault();

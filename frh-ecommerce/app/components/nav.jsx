@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 export default function nav() {
 
-  const urlpage = "http://localhost:5500/"
+  const urlpage = "http://127.0.0.1:5500/"
 
   return (
     <div className={styles.topNav}>
