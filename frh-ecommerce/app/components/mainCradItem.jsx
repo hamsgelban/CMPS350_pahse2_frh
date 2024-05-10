@@ -8,6 +8,10 @@ import MiniCard from '@/app/components/miniCardItems'
 
 
 export default function mainCardGeneral({ data }) {
+    const imageLinks = [
+        "https://i.pinimg.com/564x/2e/85/ec/2e85ecb7ed70ca8de39484def02d0670.jpg",
+        "https://i.pinimg.com/736x/b0/c7/9d/b0c79d908753bbad37a671b51b39ad74.jpg"
+    ];
     return (
         <Card className={styles.topCard}>
             <CardActionArea>
@@ -16,7 +20,7 @@ export default function mainCardGeneral({ data }) {
                         Top Three Items
                     </Typography>
                     {data.map((dataItem, index) => (
-                        <MiniCard key={index} data={dataItem} />
+                        <MiniCard key={index} data={dataItem} url={imageLinks[index]} />
                     ))}
                 </CardContent>
             </CardActionArea>

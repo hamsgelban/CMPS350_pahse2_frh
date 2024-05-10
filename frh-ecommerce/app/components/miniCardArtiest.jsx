@@ -6,14 +6,14 @@ import styles from "@/app/page.module.css";
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 
-export default function MiniCardCategory({ data, imageUrl }) {
+export default function MiniCardCategory({ data, url }) {
     return (
         <Card className={styles.miniCard}>
             <CardActionArea>
                 <CardMedia
                     component="img"
                     height="140"
-                    image={`https://i.pinimg.com/564x/91/10/ea/9110ea8ee4374256f01f6c913b3d488d.jpg`} // Use imageUrl directly
+                    image={url} 
                     alt="Top Artist cards"
                 />
                 <CardContent>
