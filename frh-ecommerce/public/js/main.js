@@ -128,10 +128,10 @@ async function getLoggedInUser(){
         console.log("IS ADMIN");
     }
 }
+
 async function updateLoginLink() {
     try {
-        // const loggedInUser = users.find(u => u.isLoggedIn === true);
-        await getLoggedInUser()
+        await getLoggedInUser();
 
         if (loggedInUser) {
             loginLINK.innerHTML = `<a href="#" id="loggedIn" class="login">Logout</a>`;
@@ -142,6 +142,9 @@ async function updateLoginLink() {
 
             if (isAdmin) {
                 addAdminTab();
+                removeProfileTab();
+            } else {
+                addProfileTab();
             }
         } else {
             loginLINK.innerHTML = `<a href="#" id="loggedOut" class="login">Login</a>`;
@@ -150,10 +153,26 @@ async function updateLoginLink() {
                 handleLogin();
             });
             removeAdminTab();
+            addProfileTab();
         }
-    
     } catch (error) {
         console.error("Failed to update login link:", error);
+    }
+}
+
+
+function removeProfileTab() {
+    const profileTab = document.querySelector('#profile');
+    if (profileTab) {
+        profileTab.style.display = 'none'; 
+    }
+}
+
+
+function addProfileTab() {
+    const profileTab = document.querySelector('#profile');
+    if (profileTab) {
+        profileTab.style.display = '';
     }
 }
 
