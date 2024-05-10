@@ -431,7 +431,7 @@ class EcommerceRepo {
             const transactions = await prisma.transaction.findMany({
                 where: {
                     artwork: {
-                        artistID: artistId
+                        artistID: parseInt(artistId)
                     }
                 },
                 include: {

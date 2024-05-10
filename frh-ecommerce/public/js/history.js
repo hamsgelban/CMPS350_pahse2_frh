@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadCommonElements();
         await loadUsers();
         await loadUserTransactions();
-        showItems();
+        await showItems();
         getTotalAmount();
         completeCustomerInfo();
     } catch (error) {
@@ -80,13 +80,14 @@ async function itemsToHTML(transactionItem) {
 
 function getTotalAmount() {
     let sum = items && items.reduce((acc, item) => acc + (item.totalPrice), 0);
-    totalAmount.textContent = `${sum} QAR`;
+    totalAmount.value = `${sum} QAR`;
 }
 
 function completeCustomerInfo() {
     if (loggedInUser) {
         customerUsername.textContent = loggedInUser.username;
-        customerName.textContent = loggedInUser.name;
-        customerPurchases.textContent = items.length;
+        customerName.value = loggedInUser.name;
+        customerPurchases.value = items.length;
+        getTotalAmount()
     }
 }
