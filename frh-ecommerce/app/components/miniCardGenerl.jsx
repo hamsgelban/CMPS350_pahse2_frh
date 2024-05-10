@@ -1,17 +1,16 @@
 import * as React from 'react';
-import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import styles from "@/app/page.module.css";
+import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
 
-
-export default function card({artist}) {
-    return (
-        <Card sx={{ maxWidth: 345 }} className={styles.topCard}>
+export default function miniCardGenerl({data}) {
+  return (
+    <Card className={styles.miniCard}>
             <CardActionArea>
-                <CardMedia
+            <CardMedia
                     component="img"
                     height="140"
                     image=""
@@ -19,14 +18,16 @@ export default function card({artist}) {
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                        Name: {artist.name}
+                        Hello From Mini
+                    <Card></Card>
+                    <Card></Card>
+                    <Card></Card>
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        Balance: {artist.balance}
+                        Mini
                     </Typography>
                 </CardContent>
             </CardActionArea>
         </Card>
-    );
+  )
 }
-

@@ -344,7 +344,7 @@
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
-.topCard {
+/* .topCard {
   grid-column: 2/3;
   grid-row: 3/4;
   width: 90%;
@@ -354,7 +354,32 @@
   border-radius: 20px;
   margin-top: 2rem;
   margin-bottom: 2rem;
+} */
+
+.topCard {
+  width: 100%;
+  background-color: #b2c2c2;
+  padding: 20px;
+  text-align: center;
+  border-radius: 20px;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
+
+.miniCard {
+  background-color: #daebeb;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-right: 20px; /* Increase the space between mini cards */ 
+  margin-bottom: 2rem;
+
+}
+
 
 @media (max-width : 50rem) {
   .history {

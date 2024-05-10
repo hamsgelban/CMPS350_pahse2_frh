@@ -1,14 +1,14 @@
 import React from 'react';
 import styles from "@/app/page.module.css";
 import Top from '@/app/components/top'
-import Card from '@/app/components/card'
-import Table from '@/app/components/table'
 import ecommerceRepo from '@/app/repo/frh-ecommerce-repo'
 import ArtistTable from '../components/artistTable';
 import CustomerTable from '../components/customerTable'
 import TotalCityTable from '../components/totalCity'
 import TotalCategoryTable from '../components/totalCategory'
 import TotalUserTable from '../components/totalUser'
+import MainCard from '@/app/components/mainCradGeneral'
+
 
 
 
@@ -110,7 +110,7 @@ export default async function Admin() {
                     <div className={styles.tableCard}><TotalCategoryTable data={catdata}></TotalCategoryTable></div>
                     {topArtists.map(a => (
                         <div className={styles.tableCard}>
-                            <Card artist={a}></Card>
+                            <MainCard></MainCard>
                         </div>
                     ))}
                 </div>
